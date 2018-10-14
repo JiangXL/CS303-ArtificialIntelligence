@@ -1,0 +1,227 @@
+import numpy as np
+import random
+import time
+
+""" AI solution for Gomoku
+Description : AI chess
+Input : chessboard layout
+Outputh :
+Version: v0.1  20181013 H.F.
+ToDo:
+"""
+
+COLOR_BLACK=-1
+COLOR_WHITE=1
+COLOR_NONE=0
+random.seed(0)
+#don't change the class name
+class AI(object):
+    #chessboard_size, color, time_out passed from agent
+    def __init__(self, chessboard_size, color, time_out):
+        self.chessboard_size = chessboard_size
+        #You are white or black
+        self.color = color
+        #the max time you should use,
+        self.time_out = time_out
+        # System will get the end of your candidate_list as your decision
+        self.candidate_list = []
+        # flag of each layout, mean remining steps
+        self.live4_flag = 0 # live4 flag
+        self.biflush4_flag = 0 #Double flush four
+        self.max_credit = 1023
+        self.defence5line_credit = 1000
+        self.live4_credit = 900
+        self.defence4live_credit = 850
+        self.double3_credit = 800
+        self.defence3double_credit = 750
+
+    # If your are the first, this function will be used.
+    def first_chess(self):
+        assert self.color == COLOR_BLACK
+        self.candidate_list.clear()
+        #==================================================================
+        #Here you can put your first piece
+        #for example, you can put your piece on sun（天元）
+        self.candidate_list.append((self.chessboard_size//2,self.chessboard_size//2))
+        self.chessboard[self.candidate_list[-1][0], self.candidate_list[-1][0]] = self.color
+        print(self.color)
+        # take care whether first step is on sun
+
+    # The input is current chessboard.
+    def go(self, chessboard):
+        #self.candidate_list.clear()
+        #===============Action handle==========================================
+        idx = np.where(chessboard == 0)
+        idx = list(zip(idx[0], idx[1]))
+        new_pos = idx[len(idx)//2]# choose middle value
+        self.candidate_list.append((new_pos[0],new_pos[1]))
+        print("Color: %d"%(self.color))
+        # Only action when empty pos i chessboard more than 1
+        if(len(idx)>1):
+            #new_pos = idx[0];
+            new_pos = self.descision(chessboard, idx)
+        else:
+            new_pos = idx[0] # choose the only one position
+            print("No enough empty position")
+        #===============Error handle===========================================
+        # Make sure that the position in chess board is empty
+        if not chessboard[new_pos[0],new_pos[1]]==0:
+            new_pos = idx[len(idx)//2]         # replace with an empty position
+            print("wrong")
+        # Update decision into candidate_list
+        print("Final position (%d, %d) "%(new_pos[0],new_pos[1]))
+        print(chessboard)
+        print()
+        self.candidate_list[-1]=((new_pos[0],new_pos[1]))
+
+    # Find out next position
+    def descision(self, chessboard, idx):
+        print("Descising...")
+        #search_box=
+        # Deal some layout needn't search
+        if self.live4_flag>0 :
+            #choose_pos=live4solver(chessboard)
+            print("live4")
+        elif self.biflush4_flag > 0:
+            print("Double flush four")
+            #choose_pos=self.biflush4solver(chessboard)
+        else:
+            print("Searching...")
+            # find highest score point
+            max_candidate = -1              # trick value to avoid initial case
+            for point in idx:
+                temp = self.pattern_evl(chessboard, point)
+                if temp == self.max_credit:                    # largest credit
+                    choose_pos= point
+                    #print("Found largest credit %d %d"%(choose_pos[0],choose_pos[1]))
+                    break
+                elif temp > max_candidate:
+                    max_candidate = temp
+                    choose_pos= point
+                    #print("Find larger credit %d %d"%(choose_pos[0],choose_pos[1]))
+        #choose_pos=(2,2)
+        return choose_pos
+
+    def pattern_evl(self, chessboard, candidate_point):
+        x = candidate_point[1]
+        y = candidate_point[0]
+        #print("Checking point(%d, %d)"%(x,y))
+        eval_value = 0
+        line5 = self.line5detect(chessboard, x, y)
+        if line5 :
+            eval_value = line5
+        else:
+            live4 = self.live4detect(chessboard, x, y)
+            if live4:
+                eval_value = live4
+            else:
+                double3 = self.double3detect(chessboard, x, y)
+                if double3:
+                    eval_value = double3
+        # To do: reduce search region
+        return eval_value
+
+    def line5detect(self, chessboard, x, y):
+        #print("Detect line5 on (%d, %d)"%(x, y))
+        result = 0
+        for i in range(-4,5): # Todo: this range is over
+            if x+i>-1 and x+i+4<self.chessboard_size : # check in horizontal
+                #print("Searching in horizontal (%d, %d)"%(y,x+i))
+                temp_x = self.color*sum(chessboard[y,x+i:x+i+4])
+                if temp_x == 4 :
+                    result = self.max_credit
+                    print("Inline5 in horizontal in %d"%(y))
+                    break
+                elif temp_x == -4 :
+                    result = self.defence5line_credit
+                    print("Found opponent's horizontal line5 in %d"%(y))
+            if y+i>-1 and y+i+4<self.chessboard_size :      # check in vertical
+                temp_y = self.color*sum(chessboard[y+i:y+i+4,x])
+                if temp_y == 4 :
+                    result = self.max_credit
+                    print("Found our vertical line5 in %d"%(x))
+                    break
+                elif temp_y == -4:
+                    print("Found opponent's vertical line5 in %d"%(x))
+                    result = self.defence5line_credit
+                if x+i>-1 and x+i+4<self.chessboard_size :  # check in diagonal
+                    temp_sum = 0
+                    for j in range (0,5):
+                        temp_sum += chessboard[y+i+j, x+i+j]
+                    temp_d = self.color*temp_sum
+                    if temp_d == 4:
+                        result = self.max_credit
+                        print("Found our Line5 diagonal")
+                        break
+                    elif temp_d == -4:
+                        result = self.defence5line_credit
+                        print("Found opponent line5 diagonal")
+        return result
+
+    def live4detect(self, chessboard, x, y):
+        result = 0
+        pattern = self.color*np.array([0,1,1,1,1,0])
+        #print("Checking point live4 (%d, %d)"%(x,y))
+        temp_y = 0
+        temp_x = 0
+        temp_d = 0 # in diagose
+        for i in range(-3,1):
+            if (x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in horizontal
+                temp_x = np.dot(pattern, chessboard[y, x+i-1:x+i+5])
+                #print("Check live4 in horizon %s"%(chessboard[y,x+i-1:x+i+5]))
+            if (y+i-1 > -1) and (y+i+4 < self.chessboard_size) : # in vertical
+                temp_y = np.dot(pattern, chessboard[y+i-1:y+i+5, x])
+                array_d = np.zeros(6)
+                if(x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in diag
+                    for j in range(0,6):
+                        #print( chessboard[y+i-1+j, x+i-1+j])
+                        array_d[j]=chessboard[y+i-1+j, x+i-1+j]
+                    temp_d = np.dot(array_d, pattern)
+            #print("temp_x:%d"%(temp_x))
+            if (temp_x == 3) or (temp_y == 3) or (temp_d == 3):
+                print("Biuld live4!(%d, %d)"%(x,y))
+                result = self.live4_credit
+                #self.live4_flag = 1                # mark for next step
+                break
+            elif (temp_x == -3) or (temp_y == -3) or (temp_d == -3):
+                #print("Found oppoent's live4 on (%d, %d)"%(x,y))
+                result = self.defence4live_credit
+        return result
+
+    def live4solver(self, chessboard):
+        print("Live 4 Solving")
+        if self.live4_flag == 1:
+            self.live4_flag -= 1
+
+    def diflush4detect(self, chessboard, x, y):
+        result = 0
+        return result
+
+    def double3detect(self, chessboard, x, y):
+        #print("Double3 detecting on (%d, %d)"%(x, y))
+        result = 0
+        temp_x1 = 0
+        temp_x2 = 0
+        temp_y1 = 0
+        temp_x2 = 0
+        pattern = self.color*np.array([0,1,1,0])
+        # in horizontal
+        if x-3 > -1 :
+            #print(chessboard[y, x-3:x+1])
+            temp_x1 = np.dot(pattern, chessboard[y, x-3:x+1])
+        elif x+4 < self.chessboard_size :
+            #print(chessboard[y, x:x+4])
+            temp_x2 = np.dot(pattern, chessboard[y, x:x+4])
+        # in vectical
+        if y-3 > -1 :
+            temp_y1 = np.dot(pattern, chessboard[y-3:y+1, x])
+        elif y+4 < self.chessboard_size :
+            temp_y2 = np.dot(pattern, chessboard[y:y+4, x])
+        # combine horizontal and vectical
+        if (temp_x1 == 2 or temp_x2 == 2) and (temp_y1==2 or temp_y2==2):
+            print("Found our double3 (%d, %d)"%(x, y))
+            result = self.double3_credit
+        elif (temp_x1 == -2 or temp_x2 == -2) and (temp_y1==-2 or temp_y2==-2):
+            result = self.defence3double_credit
+            print("Found opponent's double3 (%d, %d)"%(x, y))
+        return result

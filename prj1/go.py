@@ -5,9 +5,9 @@ import time
 """ AI solution for Gomoku
 Description : AI chess
 Input : chessboard layout
-Outputh : 
+Outputh :
 Version: v0.1  20181013 H.F.
-ToDo: 
+ToDo:
 """
 
 COLOR_BLACK=-1
@@ -29,6 +29,7 @@ class AI(object):
         self.live4_flag = 0 # live4 flag
         self.biflush4_flag = 0 #Double flush four
         self.max_credit = 1023
+        self.defence5line_credit = 1000
         self.live4_credit = 900
         self.defence4live_credit = 850
         self.double3_credit = 800
@@ -56,7 +57,7 @@ class AI(object):
         self.candidate_list.append((new_pos[0],new_pos[1]))
         print("Color: %d"%(self.color))
         # Only action when empty pos i chessboard more than 1
-        if(len(idx)>1): 
+        if(len(idx)>1):
             #new_pos = idx[0];
             new_pos = self.descision(chessboard, idx)
         else:
@@ -76,7 +77,7 @@ class AI(object):
     # Find out next position
     def descision(self, chessboard, idx):
         print("Descising...")
-        #search_box= 
+        #search_box=
         # Deal some layout needn't search
         if self.live4_flag>0 :
             #choose_pos=live4solver(chessboard)
@@ -104,8 +105,10 @@ class AI(object):
     def pattern_evl(self, chessboard, candidate_point):
         x = candidate_point[1]
         y = candidate_point[0]
+        chessboard[y, x] =self.color
         #print("Checking point(%d, %d)"%(x,y))
         eval_value = 0
+
         line5 = self.line5detect(chessboard, x, y)
         if line5 :
             eval_value = line5
@@ -120,100 +123,75 @@ class AI(object):
         # To do: reduce search region
         return eval_value
 
-    def line5detect(self, chessboard, x, y):
-        #print("Detect line5 on (%d, %d)"%(x, y))
-        result = 0
-        for i in range(-4,5): # Todo: this range is over
-            if x+i>-1 and x+i+4<self.chessboard_size : # check in horizontal
-                #print("Searching in horizontal (%d, %d)"%(y,x+i))
-                if self.color*sum(chessboard[y,x+i:x+i+4]) == 4 :
-                    result=self.max_credit
-                    print("Inline5 in horizontal in %d"%(y))
-                    break
-            if y+i>-1 and y+i+4<self.chessboard_size :      # check in vertical
-                if self.color*sum(chessboard[y+i:y+i+4,x]) == 4 :
-                    result=self.max_credit
-                    print("Inline5 in vertical in %d"%(x))
-                    break
-                if x+i>-1 and x+i+4<self.chessboard_size :  # check in diagonal
-                    temp_sum = 0
-                    for j in range (0,5):
-                        temp_sum += chessboard[y+i+j, x+i+j]
-                    if self.color*temp_sum == 4:
-                        result = self.max_credit
-                        print("Line 5 diagonal")
-                        break
-        return result
+    # extra chess style from chess on one line
+    def evaluateLine(self, chess_line, chess_color):
+        print("evaluate line vuale")
+        linevalue = 0  # return value
+        continue_point = 0 # 连子数
+        block_point = 0 # 封闭
+        for i in range(0, chessboard):
+            if chess_line[i] == chess_color: # 找到己方棋子
+                # 还原计算
+                continue_point = 1
+                block_point = 0
+                # check left side if exit opponent's chess
+                if chess_line[i-1] == -chess_color : block_point+=1
+                # check link chess
+                for j in range(i+1, self.chessboard_size+1):
+                    if chess_line[j] == chess_color:
+                        continue_point+=1
+                        i+=1
+                if chess_line[i+1] == -chess_color: block_point+=1 # 边界也算冲
+                linevalue+= self.mapValue(continue_point, block_point)
+        return linevalue
 
-    def defence5line(self, chessboard, candidate_point):
-        print("Defence opponent 5 inline")
-        result = 0
-        return result
+    # simple search to get hightest score point
+    def simplesearch():
 
-    def live4detect(self, chessboard, x, y):
-        result = 0
-        pattern = self.color*np.array([0,1,1,1,1,0])
-        #print("Checking point live4 (%d, %d)"%(x,y))
-        temp_y = 0 
-        temp_x = 0
-        temp_d = 0 # in diagose
-        for i in range(-3,1):
-            if (x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in horizontal
-                temp_x = np.dot(pattern, chessboard[y, x+i-1:x+i+5])
-                #print("Check live4 in horizon %s"%(chessboard[y,x+i-1:x+i+5]))
-            if (y+i-1 > -1) and (y+i+4 < self.chessboard_size) : # in vertical
-                temp_y = np.dot(pattern, chessboard[y+i-1:y+i+5, x])
-                array_d = np.zeros(6)
-                if(x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in diag
-                    for j in range(0,6):
-                        #print( chessboard[y+i-1+j, x+i-1+j])
-                        array_d[j]=chessboard[y+i-1+j, x+i-1+j]
-                    temp_d = np.dot(array_d, pattern)
-            #print("temp_x:%d"%(temp_x))
-            if (temp_x == 3) or (temp_y == 3) or (temp_d == 3):
-                print("Biuld live4!(%d, %d)"%(x,y))
-                result = self.live4_credit
-                #self.live4_flag = 1                # mark for next step
-                break
-            elif (temp_x == -3) or (temp_y == -3) or (temp_d == -3):
-                #print("Found oppoent's live4 on (%d, %d)"%(x,y))
-                result = self.defence4live_credit
-        return result
-    
-    def live4solver(self, chessboard):
-        print("Live 4 Solving")
-        if self.live4_flag == 1:
-            self.live4_flag -= 1
-
-    def diflush4detect(self, chessboard, x, y):
-        result = 0
-        return result
-
-    def double3detect(self, chessboard, x, y):
-        #print("Double3 detecting on (%d, %d)"%(x, y))
-        result = 0
-        temp_x1 = 0
-        temp_x2 = 0
-        temp_y1 = 0
-        temp_x2 = 0
-        pattern = self.color*np.array([0,1,1,0])
-        # in horizontal
-        if x-3 > -1 :
-            #print(chessboard[y, x-3:x+1])
-            temp_x1 = np.dot(pattern, chessboard[y, x-3:x+1])
-        elif x+4 < self.chessboard_size :
-            #print(chessboard[y, x:x+4])
-            temp_x2 = np.dot(pattern, chessboard[y, x:x+4])
-        # in vectical
-        if y-3 > -1 :
-            temp_y1 = np.dot(pattern, chessboard[y-3:y+1, x]) 
-        elif y+4 < self.chessboard_size :
-            temp_y2 = np.dot(pattern, chessboard[y:y+4, x])
-        # combine horizontal and vectical
-        if (temp_x1 == 2 or temp_x2 == 2) and (temp_y1==2 or temp_y2==2):
-            print("Found our double3 (%d, %d)"%(x, y))
-            result = self.double3_credit
-        elif (temp_x1 == -2 or temp_x2 == -2) and (temp_y1==-2 or temp_y2==-2):
-            result = self.defence3double_credit 
-            print("Found opponent's double3 (%d, %d)"%(x, y))
-        return result
+    # maping score from chess style
+    def mapValue(continue_point, block_point):
+        score_map={'DEADZERO': 0,
+                   'LIVEONE': 10,
+                   'LIVETWO': 100,
+                   'LIVETHREE': 1000,
+                   'LIVEFOUR': 100000,
+                   'LINEFIVE': 10000000,
+                   'BLOCKED_ONE': 1,
+                   'BLOCKED_TWO': 10,
+                   'BLOCKED_THREE': 100,
+                   'BLOCK_FOUR': 10000}
+        if block_point == 0:
+            if continue_point == 1 : return score_map('LIVEONE')
+            elif continue_point == 2: return score_map('LIVETWO')
+            elif continue_point == 3: return score_map('LIVETHREE')
+            elif continue_point == 4: return score_map('LIVEFOUR')
+            else: return score_map('LINEFIVE')
+        elif block_point == 1:
+            print("眠")
+            if continue_point == 1 : return score_map('BLOCKED_ONE')
+            elif continue_point == 2: return score_map('BLOCKED_TWO')
+            elif continue_point == 3: return score_map('BLOCKED_THREE')
+            elif continue_point == 4: return score_map('BLOCK_FOUR')
+            else: return score_map('LINEFIVE')
+        else: # both two side are opponent's chess
+            print("死")
+            if continue_point>= 5: return score_map('LINEFIVE')
+            else: return score_map('DEADZERO')
+    # calculate the total score of AI or user
+    def evaluateState(self, chessboard, chess_color):
+        print("Evaluate ")
+        value = 0
+        line = np.zeros([6, self.chessboard_size+1])
+        # For the convience to check edge
+        line[:, 0] = -chess_color
+        line[:,-1]= -chess_color
+        for i in range(0,self.chessboard_size):
+            lineP = 0
+            line[0,1:-2] = chessboard[i,:] # --
+            line[1,1:-2] = chessboard[:,i] # |
+            #line[2, ]
+            region = 6
+            if i==0 : region = 4
+            for line_no in range(0, region):
+                value += self.evaluateLine(line[line_no], chess_color)
+        return value
