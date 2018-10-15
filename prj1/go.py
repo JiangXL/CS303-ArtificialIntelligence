@@ -123,6 +123,22 @@ class AI(object):
         # To do: reduce search region
         return eval_value
 
+    # simple search to get hightest score point
+    def simplesearch(self, chessboard, chess_color, idx):
+        added_chessboard = chessboard.copy()
+        max_score_point = idx[0]
+        max_score = -1 # initial max_score
+        for empty_point in idx:
+            print("Searching points")
+            # we need to update chessboard
+            # chessboard[empty_point] = chess_color
+            temp = self.evaluateState(chessboard, chess_color)
+            if temp > max_score:
+                max_score = temp
+                max_score_point = empty_point
+            chessboard[empty_point]
+        return max_score_point
+
     # extra chess style from chess on one line
     def evaluateLine(self, chess_line, chess_color):
         print("evaluate line vuale")
@@ -144,9 +160,6 @@ class AI(object):
                 if chess_line[i+1] == -chess_color: block_point+=1 # 边界也算冲
                 linevalue+= self.mapValue(continue_point, block_point)
         return linevalue
-
-    # simple search to get hightest score point
-    def simplesearch():
 
     # maping score from chess style
     def mapValue(continue_point, block_point):
