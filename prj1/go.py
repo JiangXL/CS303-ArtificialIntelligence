@@ -1,4 +1,4 @@
-import numpy as np
+﻿import numpy as np
 import random
 import time
 
@@ -6,7 +6,7 @@ import time
 Description : AI chess
 Input : chessboard layout
 Outputh : next chess localtion
-Version: v0.2  20181016 H.F. Simple Searching
+Version: v0.3  20181016 H.F. Alphabeta Searching
 ToDo: Use minmax
 """
 
@@ -107,13 +107,13 @@ class AI(object):
         #choose_pos=(2,2)
         return choose_pos
 
-    def pattern_evl(self, chessboard, candidate_point):
-        x = candidate_point[1]
-        y = candidate_point[0]
-        chessboard[y, x] =self.color
-        #print("Checking point(%d, %d)"%(x,y))
-        eval_value = 0
+    def nextMove(self, source_chessboard):
+        empty_point = np.where(chessboard == 0)
+        empty_point = list(zip(idx[0], idx[1]))
+        if len(idx) == 1: no_empty = 1
+        next_pos = idx[len(idx)//2]# choose middle value
 
+        '''
         line5 = self.line5detect(chessboard, x, y)
         if line5 :
             eval_value = line5
@@ -125,14 +125,25 @@ class AI(object):
                 double3 = self.double3detect(chessboard, x, y)
                 if double3:
                     eval_value = double3
+        '''
         # To do: reduce search region
-        return eval_value
+        return no_empty, next_pos
 
-    def alphaBeta(self, depth, alpha, beta):
-        if depth == 0 :
+    def alphaBeta(self, source_chessboard, epth, alpha, beta, chess_color):
+        is_full_pos, next_pos = self.nextMove(source_chessboard)
+        if depth == 0 or is_full_pos: # or no empty position
             return self.evaluateState(sourceChessboard, chess_color)
-        updatedChessboard = sourceChessboard.copy()
-
+        else:
+            updated_chessboard = source_chessboard.copy()
+            while ():
+                updated_chessboard[next_pos[0],next_pos[1]] = chess_color
+                weight = alphaBeta(updated_chessboard, depth -1, -beta, -alpha, -chess_color)
+                #UnmakeMove()?
+                if weight >= beta :
+                    return beta
+                if weight > alpha :
+                   alpha = weight
+            return alpha
 
     # simple search to get hightest score point
     def simpleSearch(self, current_chessboard, chess_color, idx):
