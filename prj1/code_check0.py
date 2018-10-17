@@ -13,7 +13,7 @@ from go import AI
 if __name__ == '__main__':
     #code_checker = CodeCheck("Your code address", 15
     chessboard_size = 15
-    color = 1
+    color = -1
     time_out = 5
     gomoku_ai = AI(chessboard_size, color, time_out)
 

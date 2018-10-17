@@ -63,8 +63,9 @@ class AI(object):
         # Only action when empty pos i chessboard more than 1
         if(len(idx)>1):
             #new_pos = idx[0];
-            #new_pos = self.descision(chessboard, idx)
-            new_pos = self.simpleSearch(chessboard, self.color, idx)
+            new_pos = self.descision(chessboard, idx)
+            #new_pos = self.simpleSearch(chessboard, self.color, idx)
+            #print(new_pos)
         else:
             new_pos = idx[0] # choose the only one position
             if self.debug : print("No enough empty position")
@@ -95,7 +96,8 @@ class AI(object):
             # find highest score point
             max_candidate = -1              # trick value to avoid initial case
             for point in idx:
-                temp = self.pattern_evl(chessboard, point)
+                #temp = self.pattern_evl(chessboard, point)
+                temp = self.alphaBeta(chessboard, 2, - 999999999, +999999999, self.color)
                 if temp == self.max_credit:                    # largest credit
                     choose_pos= point
                     #print("Found largest credit %d %d"%(choose_pos[0],choose_pos[1]))
@@ -108,10 +110,12 @@ class AI(object):
         return choose_pos
 
     def nextMove(self, source_chessboard):
-        empty_point = np.where(chessboard == 0)
-        empty_point = list(zip(idx[0], idx[1]))
-        if len(idx) == 1: no_empty = 1
-        next_pos = idx[len(idx)//2]# choose middle value
+        no_empty = 0
+        empty_point = np.where(source_chessboard == 0)
+        empty_point = list(zip(empty_point[0], empty_point[1]))
+        if len(empty_point) == 1: no_empty = 1
+        next_pos = empty_point[len(empty_point)//2]# choose middle value
+        # sort the point return max point position
 
         '''
         line5 = self.line5detect(chessboard, x, y)
@@ -129,16 +133,26 @@ class AI(object):
         # To do: reduce search region
         return no_empty, next_pos
 
-    def alphaBeta(self, source_chessboard, epth, alpha, beta, chess_color):
+    def movesLeft(self, source_chessboard):
+        empty_point = np.where(source_chessboard == 0)
+        empty_point = list(zip(empty_point[0], empty_point[1]))
+        return len(empty_point)
+
+    def alphaBeta(self, source_chessboard, depth, alpha, beta, chess_color):
         is_full_pos, next_pos = self.nextMove(source_chessboard)
+        print("search pint %d %d"%(next_pos[0], next_pos[1]))
         if depth == 0 or is_full_pos: # or no empty position
-            return self.evaluateState(sourceChessboard, chess_color)
+            print("Test label")
+            return self.evaluateState(source_chessboard, chess_color)-self.evaluateState(source_chessboard, chess_color)
         else:
-            updated_chessboard = source_chessboard.copy()
-            while ():
-                updated_chessboard[next_pos[0],next_pos[1]] = chess_color
-                weight = alphaBeta(updated_chessboard, depth -1, -beta, -alpha, -chess_color)
+            #updated_chessboard = source_chessboard.copy()
+            while self.movesLeft(source_chessboard):
+                #updated_chessboard[next_pos[0],next_pos[1]] = chess_color
+                source_chessboard[next_pos[0],next_pos[1]] = chess_color
+                weight = - self.alphaBeta(source_chessboard, depth -1, -beta, -alpha, chess_color)
                 #UnmakeMove()?
+                #del updated_chessboard
+                source_chessboard[next_pos[0],next_pos[1]] = 0
                 if weight >= beta :
                     return beta
                 if weight > alpha :
