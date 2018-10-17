@@ -65,7 +65,7 @@ class CodeCheck():
         return True
 
     def __check_go (self, chessboard):
-        self.agent = imp.load_source('AI', self.script_file_path).AI(self.chessboard_size, 1, self.time_out)
+        self.agent = imp.load_source('AI', self.script_file_path).AI(self.chessboard_size, -1, self.time_out)
         try:
             timeout(self.time_out)(self.agent.go)(np.copy(chessboard))
         except Exception:

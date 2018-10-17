@@ -34,7 +34,7 @@ class AI(object):
         self.defence4live_credit = 850
         self.double3_credit = 800
         self.defence3double_credit = 750
-        self.debug = 0
+        self.debug = 1
 
     # If your are the first, this function will be used.
     def first_chess(self):
