@@ -1,4 +1,4 @@
-﻿import numpy as np
+import numpy as np
 import random
 import time
 
@@ -6,7 +6,7 @@ import time
 Description : AI chess
 Input : chessboard layout
 Outputh : next chess localtion
-Version: v0.3  20181016 H.F. Alphabeta Searching
+Version: v0.2  20181016 H.F. Simple Searching
 ToDo: Use minmax
 """
 
@@ -25,26 +25,32 @@ class AI(object):
         self.time_out = time_out
         # System will get the end of your candidate_list as your decision
         self.candidate_list = []
-        self.debug = 0
-        self.chessboard = np.zeros((chessboard_size,chessboard_size), dtype=np.int)
+        # flag of each layout, mean remining steps
+        self.live4_flag = 0 # live4 flag
+        self.biflush4_flag = 0 #Double flush four
+        self.max_credit = 1023
+        self.defence5line_credit = 1000
+        self.live4_credit = 900
+        self.defence4live_credit = 850
+        self.double3_credit = 800
+        self.defence3double_credit = 750
+        self.debug = 1
 
     # If your are the first, this function will be used.
     def first_chess(self):
         assert self.color == COLOR_BLACK
         self.candidate_list.clear()
-        if self.debug : print(self.chessboard)
         #==================================================================
         #Here you can put your first piece
         #for example, you can put your piece on sun（天元）
         self.candidate_list.append((self.chessboard_size//2,self.chessboard_size//2))
         self.chessboard[self.candidate_list[-1][0], self.candidate_list[-1][0]] = self.color
-        if self.debug : print(self.color)
-        if self.debug : print(self.chessboard)
+        print(self.color)
         # take care whether first step is on sun
 
     # The input is current chessboard.
     def go(self, chessboard):
-        self.candidate_list.clear()
+        #self.candidate_list.clear()
         #===============Action handle==========================================
         idx = np.where(chessboard == 0)
         idx = list(zip(idx[0], idx[1]))
@@ -55,8 +61,7 @@ class AI(object):
         if(len(idx)>1):
             #new_pos = idx[0];
             #new_pos = self.descision(chessboard, idx)
-            new_pos = self.finalSearch(chessboard, self.color, idx)
-            #print(new_pos)
+            new_pos = self.simpleSearch(chessboard, self.color, idx)
         else:
             new_pos = idx[0] # choose the only one position
             if self.debug : print("No enough empty position")
@@ -66,62 +71,46 @@ class AI(object):
             new_pos = idx[len(idx)//2]         # replace with an empty position
             if self.debug : print("wrong")
         # Update decision into candidate_list
-        if self.debug : print("Final position (%d, %d)"%(new_pos[0],new_pos[1]))
+        if self.debug : print("Final position (%d, %d) "%(new_pos[0],new_pos[1]))
         if self.debug : print(chessboard)
         if self.debug : print()
-        #self.candidate_list[-1]=((new_pos[0],new_pos[1]))
-        self.candidate_list.append((new_pos[0],new_pos[1]))
+        self.candidate_list[-1]=((new_pos[0],new_pos[1]))
 
-    # Final search to get hightest score point
-    def finalSearch(self, current_chessboard, chess_color, idx):
-        added_chessboard = current_chessboard.copy() # H.F.: It may increase cost
-        max_score_point = idx[0]
-        max_score = -10000000 # initial max_score
-        pos = np.where(added_chessboard == 1)
-        neg = np.where(added_chessboard == -1)
-        edge_xl = min(min(pos[1]), min(pos[1]))
-        edge_xr = max(max(pos[1]), max(pos[1]))
-        edge_yu = min(min(pos[0]), min(pos[0]))
-        edge_yd = max(max(pos[0]), max(pos[0]))
-        empty_points = np.where(added_chessboard[edge_yu: edge_yd+1, edge_xl:edge_xr+1] == 0)
-        empty_points = list(zip(empty_points[0]+edge_xl, empty_points[1]+edge_yu))
-        print(len(idx))
-        if len(idx) > self.chessboard_size*self.chessboard_size-2:
-            print("Test")
-            for empty_point in idx:
-                added_chessboard[empty_point[0], empty_point[1]] = chess_color
-                #print("Simple Searching points")
-                score = (self.evaluateState(added_chessboard, chess_color)
-                    -self.evaluateState(added_chessboard, -chess_color))
-                if score > max_score:
-                    max_score = score
-                    max_score_point = empty_point
-                    if self.debug : print("Score %d Point %s"%(score, empty_point))
-                added_chessboard[empty_point[0], empty_point[1]] = 0
-        else :
-            for empty_point in empty_points:
-                score = self.alphaBeta(added_chessboard, 2, -999999, 999999, -chess_color)
-                # from next
-                if score > max_score:
-                    max_score = score
-                    max_score_point = empty_point
-                    if self.debug : print("Score %d Point %s"%(score, empty_point))
-                added_chessboard[empty_point[0], empty_point[1]] = 0
-        return max_score_point
+    # Find out next position
+    def descision(self, chessboard, idx):
+        print("Descising...")
+        #search_box=
+        # Deal some layout needn't search
+        if self.live4_flag>0 :
+            #choose_pos=live4solver(chessboard)
+            print("live4")
+        elif self.biflush4_flag > 0:
+            print("Double flush four")
+            #choose_pos=self.biflush4solver(chessboard)
+        else:
+            print("Searching...")
+            # find highest score point
+            max_candidate = -1              # trick value to avoid initial case
+            for point in idx:
+                temp = self.pattern_evl(chessboard, point)
+                if temp == self.max_credit:                    # largest credit
+                    choose_pos= point
+                    #print("Found largest credit %d %d"%(choose_pos[0],choose_pos[1]))
+                    break
+                elif temp > max_candidate:
+                    max_candidate = temp
+                    choose_pos= point
+                    #print("Find larger credit %d %d"%(choose_pos[0],choose_pos[1]))
+        #choose_pos=(2,2)
+        return choose_pos
 
-    # Find out next position set
-    def genNext(self, source_chessboard):
-        pos = np.where(source_chessboard == 1)
-        neg = np.where(source_chessboard == -1)
-        edge_xl = min(min(pos[1]), min(pos[1]))
-        edge_xr = max(max(pos[1]), max(pos[1]))
-        edge_yu = min(min(pos[0]), min(pos[0]))
-        edge_yd = max(max(pos[0]), max(pos[0]))
-        empty_points = np.where(source_chessboard[edge_yu: edge_yd+1, edge_xl:edge_xr+1] == 0)
-        empty_points = list(zip(empty_points[0]+edge_xl, empty_points[1]+edge_yu))
-        #empty_points = empty_points[0:10]
-        # sort the point return max point position
-        '''
+    def pattern_evl(self, chessboard, candidate_point):
+        x = candidate_point[1]
+        y = candidate_point[0]
+        chessboard[y, x] =self.color
+        #print("Checking point(%d, %d)"%(x,y))
+        eval_value = 0
+
         line5 = self.line5detect(chessboard, x, y)
         if line5 :
             eval_value = line5
@@ -133,37 +122,29 @@ class AI(object):
                 double3 = self.double3detect(chessboard, x, y)
                 if double3:
                     eval_value = double3
-        '''
         # To do: reduce search region
-        return empty_points
+        return eval_value
 
-    # alphabeta pruching
-    def alphaBeta(self, source_chessboard, depth, alpha, beta, chess_color):
-        if depth == 0 : # or no empty position
-            #print("final")
-            #print(source_chessboard)
-            #temp = self.evaluateState(source_chessboard, chess_color)
-            temp= (self.evaluateState(source_chessboard, chess_color)
-                -self.evaluateState(source_chessboard, -chess_color))
-            #print("Test:%d"%(temp))
-            return temp
-        else:
-            updated_chessboard = source_chessboard.copy()
-            candidate_points = self.genNext(updated_chessboard)
-            #print("Len: %d depth: %d"%(len(candidate_points), depth))
-            for point in candidate_points :
-                #print("search print %d %d"%(point[0], point[1]))
-                updated_chessboard[point[0], point[1]] = chess_color
-                weight = self.alphaBeta(updated_chessboard, depth -1, -beta,
-                    -alpha, -chess_color)
-                #print("Weight: %d"%(weight))
-                updated_chessboard[point[0], point[1]] = 0
-                if weight >= beta :
-                    return beta
-                if weight > alpha :
-                    alpha = weight
-            del updated_chessboard
-        return alpha
+    # simple search to get hightest score point
+    def simpleSearch(self, current_chessboard, chess_color, idx):
+        added_chessboard = current_chessboard.copy() # H.F.: It may increase cost
+        max_score_point = idx[0]
+        max_score = -10000000 # initial max_score
+        for empty_point in idx:
+            # we need to update chessboard
+            added_chessboard[empty_point[0],empty_point[1]] = chess_color
+            #print("Simple Searching points")
+            temp = self.evaluateState(added_chessboard, chess_color)-self.evaluateState(added_chessboard, -chess_color)
+            if temp > max_score:
+                max_score = temp
+                max_score_point = empty_point
+                if self.debug : print("Score %d Point %s"%(temp, empty_point))
+                #temp2 = self.evaluateState(added_chessboard, -chess_color)
+                #print("Score -%d"%(temp2))
+                #print(added_chessboard)
+            #print(max)
+            added_chessboard[empty_point[0],empty_point[1]] = 0
+        return max_score_point
 
     # calculate the total score of AI or user
     def evaluateState(self, chessboard, chess_color):
@@ -177,6 +158,7 @@ class AI(object):
         #print(line)
         for i in range(0, self.chessboard_size):
             # scan in four directions
+            lineP = 0
             line[0, 1:-1] = chessboard[i,:] # --
             line[1,1:-1] = chessboard[:,i] # |
             for j in range(0, self.chessboard_size):
@@ -200,6 +182,7 @@ class AI(object):
                 #print("Value: %d"%value)
                 value += self.evaluateLine(line[line_no], chess_color)
             #print("State Value: %d"%(value))
+            #print(line)
         #print(value)
         return value
 
@@ -238,7 +221,7 @@ class AI(object):
                    'LIVEONE': 10,
                    'LIVETWO': 100,
                    'LIVETHREE': 1000,
-                   'LIVEFOUR': 100000,
+                   'LIVEFOUR': 1000000, #100000
                    'LINEFIVE': 10000000,
                    'BLOCKED_ONE': 1,
                    'BLOCKED_TWO': 10,
