@@ -107,9 +107,10 @@ class AI(object):
             if self.debug: print("minMax")
             for empty_point in empty_points:
                 added_chessboard[empty_point[0], empty_point[1]] = chess_color
-                score = self.alphaBeta(added_chessboard, 2, -999999, 999999, chess_color)
-                if self.debug: print("Final %d"%(score))
-                input("continue?")
+                score = self.alphaBeta(added_chessboard, 1, -99999999, 99999999, chess_color)
+                #score = self.alphaBeta(added_chessboard, 1, max_score, 99999999, chess_color)
+                if self.debug: print("Final Score %d"%(score))
+                #input("continue?")
                 # from next
                 if score > max_score:
                     max_score = score
@@ -151,37 +152,35 @@ class AI(object):
     # alphabeta pruching
     def alphaBeta(self, source_chessboard, depth, alpha, beta, chess_color):
         #input("continue?")
-        if depth == 1 : # or no empty position
+        if depth == 0 : # or no empty position
             #print("final")
-            if self.debug: print(source_chessboard)
-            if self.debug: print(chess_color)
+            #if self.debug: print(source_chessboard)
+            #if self.debug: print(chess_color)
             #temp = self.evaluateState(source_chessboard, chess_color)
             temp= (self.evaluateState(source_chessboard, chess_color)
                 -self.evaluateState(source_chessboard, -chess_color))
-            if self.debug: print("Buttom: %d"%(temp))
+            #temp=temp*chess_color
+            if self.debug: print("Now node score: %d"%(temp))
             return temp
         else:
             updated_chessboard = source_chessboard.copy()
             candidate_points = self.genNext(updated_chessboard)
             #print("Len: %d depth: %d"%(len(candidate_points), depth))
-            weight = -9999999999
+            weight = -9999999999  # smallest number
             for point in candidate_points :
                 #print("search print %d %d"%(point[0], point[1]))
                 updated_chessboard[point[0], point[1]] = -chess_color
-                weight = - self.alphaBeta(updated_chessboard, depth -1, -beta,
-                    -alpha, -chess_color)
+                #weight = max(weight, -self.alphaBeta(updated_chessboard, depth-1, -beta,-alpha, -chess_color))
+                weight = max(weight, self.alphaBeta(updated_chessboard, depth-1, -beta,-alpha, -chess_color))
                 #print("Weight: %d"%(weight))
                 updated_chessboard[point[0], point[1]] = 0
-                if weight
-
-                #if weight <= beta :
-                #    return beta
-                #if weight > alpha :
-                #    alpha = weight
+                alpha = max(alpha, weight)
+                if alpha >= beta:
+                    break
             del updated_chessboard
         #return beta # 对方最小得分
-        return alpha # 对方最小得分
-
+        return chess_color*weight # 对方最小得分
+        #return weight
 
     # calculate the total score of AI or user
     def evaluateState(self, chessboard, chess_color):
