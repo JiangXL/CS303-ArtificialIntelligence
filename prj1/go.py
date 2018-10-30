@@ -6,7 +6,7 @@ import pdb
 Description : AI chess
 Input : chessboard layout
 Outputh : next chess localtion
-Version: v0.3  20181016 H.F. Alphabeta Searching
+Version: v0.4  20181027 H.F. Alphabeta Searching
 ToDo: Use minmax
 """
 
@@ -25,8 +25,9 @@ class AI(object):
         self.time_out = time_out
         # System will get the end of your candidate_list as your decision
         self.candidate_list = []
-        self.debug = 1
+        self.debug = 0
         self.chessboard = np.zeros((chessboard_size,chessboard_size), dtype=np.int)
+        self.anfangtifet = 1 # initial depth
 
     # If your are the first, this function will be used.
     def first_chess(self):
@@ -44,7 +45,6 @@ class AI(object):
 
     # The input is current chessboard.
     def go(self, chessboard):
-        print("run go")
         self.candidate_list.clear()
         #===============Action handle==========================================
         idx = np.where(chessboard == 0)
@@ -54,17 +54,20 @@ class AI(object):
         if self.debug : print("Color: %d"%(self.color))
         # Only action when empty pos i chessboard more than 1
         if(len(idx) == self.chessboard_size*self.chessboard_size):
-            self.first_chess
+            self.first_chess()
         elif(len(idx)>1):
             #new_pos = idx[0];
             #new_pos = self.descision(chessboard, idx)
-            new_pos = self.finalSearch(chessboard, self.color, idx)
-            print(new_pos)
+            #new_pos = self.finalSearch(chessboard, self.color, idx)
+            self.alphaBeta(chessboard, self.anfangtifet, -99999999, 99999999, self.color)
+            #print(new_pos)
         else:
             new_pos = idx[0] # choose the only one position
+            self.candidate_list.append((new_pos[0],new_pos[1]))
             if self.debug : print("No enough empty position")
         #===============Error handle===========================================
         # Make sure that the position in chess board is empty
+        '''
         if not chessboard[new_pos[0],new_pos[1]]==0:
             new_pos = idx[len(idx)//2]         # replace with an empty position
             if self.debug : print("wrong")
@@ -74,23 +77,18 @@ class AI(object):
         if self.debug : print()
         #self.candidate_list[-1]=((new_pos[0],new_pos[1]))
         self.candidate_list.append((new_pos[0],new_pos[1]))
+        '''
+        #if self.debug :
+        print("Final position (%d, %d)"%(self.candidate_list[-1][0], self.candidate_list[-1][1]))
 
     # Final search to get hightest score point
     def finalSearch(self, current_chessboard, chess_color, idx):
         added_chessboard = current_chessboard.copy() # H.F.: It may increase cost
         max_score_point = idx[0]
         max_score = -1000000000 # initial max_score
-        pos = np.where(added_chessboard == 1)
-        neg = np.where(added_chessboard == -1)
-        edge_xl = min(min(pos[1]), min(pos[1]))
-        edge_xr = max(max(pos[1]), max(pos[1]))
-        edge_yu = min(min(pos[0]), min(pos[0]))
-        edge_yd = max(max(pos[0]), max(pos[0]))
-        #empty_points = np.where(added_chessboard[edge_yu: edge_yd, edge_xl:edge_xr+5] == 0)
-        empty_points = np.where(added_chessboard == 0)
-        #empty_points = list(zip(empty_points[0], empty_points[1]))
-        empty_points = list(zip(empty_points[0], empty_points[1]))
-        print(len(idx))
+        #empty_points = np.where(added_chessboard == 0)
+        empty_points = self.genNext(added_chessboard)
+        #print(len(idx))
         if len(idx) > self.chessboard_size*self.chessboard_size-5:
             print("Simple")
             for empty_point in idx:
@@ -104,34 +102,52 @@ class AI(object):
                     if self.debug : print("Score %d Point %s"%(score, empty_point))
                 added_chessboard[empty_point[0], empty_point[1]] = 0
         else :
-            if self.debug: print("minMax")
+            #if self.debug: print("minMax")
+            #start = time.time()
+
             for empty_point in empty_points:
                 added_chessboard[empty_point[0], empty_point[1]] = chess_color
-                score = self.alphaBeta(added_chessboard, 1, -99999999, 99999999, chess_color)
+                score = self.alphaBeta(added_chessboard, 0, -99999999, 99999999, chess_color)
                 #score = self.alphaBeta(added_chessboard, 1, max_score, 99999999, chess_color)
-                if self.debug: print("Final Score %d"%(score))
+                #if self.debug: print("Final Score %d"%(score))
                 #input("continue?")
+                #print(added_chessboard)
                 # from next
                 if score > max_score:
                     max_score = score
                     max_score_point = empty_point
                     if self.debug : print("Score %d Point %s"%(score, empty_point))
                 added_chessboard[empty_point[0], empty_point[1]] = 0
+            #print("alphaBeta time cost: %d"%(time.time()-start))
         return max_score_point
 
     # Find out next position set
     def genNext(self, source_chessboard):
-        pos = np.where(source_chessboard == 1)
-        neg = np.where(source_chessboard == -1)
-        edge_xl = min(min(pos[1]), min(pos[1]))
-        edge_xr = max(max(pos[1]), max(pos[1]))
-        edge_yu = min(min(pos[0]), min(pos[0]))
-        edge_yd = max(max(pos[0]), max(pos[0]))
-        #empty_points = np.where(source_chessboard[edge_yu: edge_yd+1, edge_xl:edge_xr+1] == 0)
-        empty_points = np.where(source_chessboard == 0)
-        empty_points = list(zip(empty_points[0], empty_points[1]))
-        #empty_points = list(zip(empty_points[0]+edge_xl, empty_points[1]+edge_yu))
-        #empty_points = empty_points[0:10]
+        #input("genNext?")
+        #print(source_chessboard)
+        pos = np.where(source_chessboard != 0)
+        pos_package = list(zip(pos[0], pos[1]))
+        # find positon with chess
+        neighbor_points = []
+        for chess in pos_package:
+            for i in [-1,1]:
+                for j in [-1,1]:
+                    new_pos0 = chess[0]+i
+                    new_pos1 = chess[1]+j
+                    if new_pos0 > self.chessboard_size-1:
+                        new_pos0 = self.chessboard_size-1
+                        #print("new_pos0>14: %d"%(new_pos0))
+                    elif new_pos0 < 0 :
+                        new_pos0 = 0
+                    if new_pos1 > self.chessboard_size-1:
+                        new_pos1 = self.chessboard_size-1
+                    elif new_pos1 < 0:
+                        new_pos1 = 0
+                    new_pos = (new_pos0, new_pos1)
+                    if (new_pos not in neighbor_points
+                            and new_pos not in pos_package ):
+                        neighbor_points.append( new_pos)
+        #print("new_pos: %d"%(len(neighbor_points)))
         # sort the point return max point positio
         '''
         line5 = self.line5detect(chessboard, x, y)
@@ -146,41 +162,42 @@ class AI(object):
                 if double3:
                     eval_value = double3
         '''
-        # To do: reduce search region
-        return empty_points
+        return neighbor_points
 
     # alphabeta pruching
     def alphaBeta(self, source_chessboard, depth, alpha, beta, chess_color):
         #input("continue?")
         if depth == 0 : # or no empty position
             #print("final")
-            #if self.debug: print(source_chessboard)
-            #if self.debug: print(chess_color)
+            if self.debug: print(source_chessboard)
+            if self.debug: print(chess_color)
             #temp = self.evaluateState(source_chessboard, chess_color)
             temp= (self.evaluateState(source_chessboard, chess_color)
                 -self.evaluateState(source_chessboard, -chess_color))
             #temp=temp*chess_color
             if self.debug: print("Now node score: %d"%(temp))
             return temp
-        else:
-            updated_chessboard = source_chessboard.copy()
-            candidate_points = self.genNext(updated_chessboard)
-            #print("Len: %d depth: %d"%(len(candidate_points), depth))
-            weight = -9999999999  # smallest number
-            for point in candidate_points :
-                #print("search print %d %d"%(point[0], point[1]))
-                updated_chessboard[point[0], point[1]] = -chess_color
-                #weight = max(weight, -self.alphaBeta(updated_chessboard, depth-1, -beta,-alpha, -chess_color))
-                weight = max(weight, self.alphaBeta(updated_chessboard, depth-1, -beta,-alpha, -chess_color))
-                #print("Weight: %d"%(weight))
-                updated_chessboard[point[0], point[1]] = 0
-                alpha = max(alpha, weight)
-                if alpha >= beta:
+        child_chessboard = source_chessboard.copy()
+        candidate_points = self.genNext(child_chessboard)
+        #print("Len: %d depth: %d"%(len(candidate_points), depth))
+        max_wert = alpha
+        for point in candidate_points :
+            #print("search print %d %d"%(point[0], point[1]))
+            child_chessboard[point[0], point[1]] = chess_color
+            wert = -self.alphaBeta(child_chessboard, depth-1, -beta,-alpha, -chess_color)
+            child_chessboard[point[0], point[1]] = 0
+            if wert > max_wert:
+                max_wert = wert
+                if max_wert >= beta :
                     break
-            del updated_chessboard
+                if depth == self.anfangtifet :
+                    self.candidate_list.append(point)
+                    print("Final point: (%d, %d)"%(point[0], point[1]))
+                    #input()
+        del child_chessboard
         #return beta # 对方最小得分
-        return chess_color*weight # 对方最小得分
-        #return weight
+        #return chess_color*weight # 对方最小得分
+        return max_wert
 
     # calculate the total score of AI or user
     def evaluateState(self, chessboard, chess_color):
