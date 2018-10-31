@@ -27,7 +27,7 @@ class AI(object):
         self.candidate_list = []
         self.debug = 0
         self.chessboard = np.zeros((chessboard_size,chessboard_size), dtype=np.int)
-        self.anfangtifet = 1 # initial depth
+        self.anfangtifet = 2 # initial depth
 
     # If your are the first, this function will be used.
     def first_chess(self):
@@ -78,6 +78,7 @@ class AI(object):
         #self.candidate_list[-1]=((new_pos[0],new_pos[1]))
         self.candidate_list.append((new_pos[0],new_pos[1]))
         '''
+        print(chessboard)
         #if self.debug :
         print("Final position (%d, %d)"%(self.candidate_list[-1][0], self.candidate_list[-1][1]))
 
@@ -99,7 +100,8 @@ class AI(object):
                 if score > max_score:
                     max_score = score
                     max_score_point = empty_point
-                    if self.debug : print("Score %d Point %s"%(score, empty_point))
+                    #if self.debug :
+                    print("Score %d Point %s"%(score, empty_point))
                 added_chessboard[empty_point[0], empty_point[1]] = 0
         else :
             #if self.debug: print("minMax")
@@ -125,28 +127,32 @@ class AI(object):
     def genNext(self, source_chessboard):
         #input("genNext?")
         #print(source_chessboard)
-        pos = np.where(source_chessboard != 0)
+        pos = np.where(source_chessboard == 0)
         pos_package = list(zip(pos[0], pos[1]))
         # find positon with chess
         neighbor_points = []
         for chess in pos_package:
-            for i in [-1,1]:
-                for j in [-1,1]:
-                    new_pos0 = chess[0]+i
-                    new_pos1 = chess[1]+j
-                    if new_pos0 > self.chessboard_size-1:
-                        new_pos0 = self.chessboard_size-1
-                        #print("new_pos0>14: %d"%(new_pos0))
-                    elif new_pos0 < 0 :
-                        new_pos0 = 0
-                    if new_pos1 > self.chessboard_size-1:
-                        new_pos1 = self.chessboard_size-1
-                    elif new_pos1 < 0:
-                        new_pos1 = 0
-                    new_pos = (new_pos0, new_pos1)
-                    if (new_pos not in neighbor_points
-                            and new_pos not in pos_package ):
-                        neighbor_points.append( new_pos)
+            for i, j in [(-1,-1), (-1,1), (1,-1), (1,1), (1,0), (0, 1),(-1,0),(0,-1)]:
+                new_pos0 = chess[0]+i
+                new_pos1 = chess[1]+j
+                if new_pos0 > self.chessboard_size-1:
+                    continue
+                    #print("new_pos0>14: %d"%(new_pos0))
+                elif new_pos0 < 0 :
+                    #new_pos0 = 0
+                    continue
+                if new_pos1 > self.chessboard_size-1:
+                    #new_pos1 = self.chessboard_size-1
+                    continue
+                elif new_pos1 < 0:
+                    #new_pos1 = 0
+                    continue
+                if source_chessboard[new_pos0, new_pos1] != 0:
+                    neighbor_points.append(chess)
+                    break
+                    #ihf (new_pos not in neighbor_points) and (new_pos not in pos_package):
+                    #    neighbor_points.append(new_pos)
+        #print(neighbor_points)
         #print("new_pos: %d"%(len(neighbor_points)))
         # sort the point return max point positio
         '''
@@ -181,19 +187,23 @@ class AI(object):
         candidate_points = self.genNext(child_chessboard)
         #print("Len: %d depth: %d"%(len(candidate_points), depth))
         max_wert = alpha
+        max_point = candidate_points[0]
         for point in candidate_points :
             #print("search print %d %d"%(point[0], point[1]))
             child_chessboard[point[0], point[1]] = chess_color
             wert = -self.alphaBeta(child_chessboard, depth-1, -beta,-alpha, -chess_color)
             child_chessboard[point[0], point[1]] = 0
+            #if self.debug :
+            #print(depth, point, '->', wert)
             if wert > max_wert:
                 max_wert = wert
+                max_point = point
                 if max_wert >= beta :
                     break
-                if depth == self.anfangtifet :
-                    self.candidate_list.append(point)
-                    print("Final point: (%d, %d)"%(point[0], point[1]))
-                    #input()
+        if depth == self.anfangtifet :
+            self.candidate_list.append(max_point)
+            if self.debug: print("Final point: (%d, %d)"%(max_point[0], max_point[1]))
+            #input()
         del child_chessboard
         #return beta # 对方最小得分
         #return chess_color*weight # 对方最小得分

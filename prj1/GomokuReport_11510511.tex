@@ -218,6 +218,9 @@ Empirical verification is compared with given test\_code.py and public test
 platform.
 
 \subsection{Design}
+Successfully to evaluate chessboard score currently. But, unfortunately, this
+alphaBeta function only work right in depth of one and two. When depth is three
+and more than three, it run in wrong and slow.
 
 I defined a variable $debug$ in $\_\_init\_\_$ to print of solving chessboard
 layout, final chosen position and some other variables. Sometimes, I use
@@ -225,11 +228,16 @@ $input()$ to pause program. Because so many data are printed in terminal, I
 output printed information to file as $python code\_test.py >> log$.
 
 \subsection{Data and data structure}
+Using data provided by code\_test.py to test.
 
+Numpy matrix is used widely.
 
 \subsection{Performance}
+When only work in one layer, it is fast but low chance to win. More depth is
+slow.
 
 \subsection{Result}
+Pass all simple case, but fail to some advantage case.
 
 \subsection{Analysis}
 

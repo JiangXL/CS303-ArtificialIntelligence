@@ -18,7 +18,7 @@ if __name__ == '__main__':
     gomoku_ai = AI(chessboard_size, color, time_out)
 
     chessboard = np.zeros((chessboard_size, chessboard_size), dtype=np.int)
-
+    '''
     chessboard[2, 2] = 1
     chessboard[3, 3] = 1
     chessboard[4, 4] = 1
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     chessboard[3, 9:11] = -1
     chessboard[6, 13] = -1
     '''
+    '''
 
     chessboard[2, 2:4] = 1
     chessboard[4, 1:3] = 1
@@ -35,6 +36,13 @@ if __name__ == '__main__':
     chessboard[2, 10] = -1
     chessboard[4, 12] = -1
     '''
+    chessboard[1, 3] = 1
+    chessboard[2, 2] = 1
+    chessboard[2, 5] = 1
+    chessboard[3:5, 3] = 1
+    chessboard[1, 11:13] = -1
+    chessboard[2, 11:13] = -1
+    chessboard[5, 13] = -1
     print(chessboard)
 
     '''
