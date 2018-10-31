@@ -35,7 +35,6 @@ if __name__ == '__main__':
     chessboard[1, 10:12] = -1
     chessboard[2, 10] = -1
     chessboard[4, 12] = -1
-    '''
     chessboard[1, 3] = 1
     chessboard[2, 2] = 1
     chessboard[2, 5] = 1
@@ -43,6 +42,13 @@ if __name__ == '__main__':
     chessboard[1, 11:13] = -1
     chessboard[2, 11:13] = -1
     chessboard[5, 13] = -1
+
+    '''
+    chessboard[2, 2:4] = 1
+    chessboard[4, 1:3] = 1
+    chessboard[1, 10:12] = -1
+    chessboard[2, 10] = -1
+    chessboard[4, 12] = -1
     print(chessboard)
 
     '''
@@ -58,7 +64,7 @@ if __name__ == '__main__':
     score= (gomoku_ai.evaluateState(chessboard, color)
         -gomoku_ai.evaluateState(chessboard, -color))
     print(score)
-    '''
+    ''' 
     gomoku_ai.go(chessboard)
 
     result = gomoku_ai.candidate_list[-1]

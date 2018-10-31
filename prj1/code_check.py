@@ -113,7 +113,6 @@ class CodeCheck():
             return False
 
         #
-        '''
         chessboard = np.zeros((self.chessboard_size, self.chessboard_size), dtype=np.int)
         chessboard[2, 2:4] = 1
         chessboard[4, 1:3] = 1
@@ -123,7 +122,6 @@ class CodeCheck():
         if not self.__check_result(chessboard, [[1, 9]]):
             self.errorcase = 2
             return False
-        '''
 
         #
         chessboard = np.zeros((self.chessboard_size, self.chessboard_size), dtype=np.int)

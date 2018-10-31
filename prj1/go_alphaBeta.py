@@ -6,7 +6,7 @@ import pdb
 Description : AI chess
 Input : chessboard layout
 Outputh : next chess localtion
-Version: v0.5  20181027 H.F. Fix the genNext miss positions issue
+Version: v0.4  20181027 H.F. Alphabeta Searching
 ToDo: Use minmax
 """
 
@@ -27,7 +27,7 @@ class AI(object):
         self.candidate_list = []
         self.debug = 0
         self.chessboard = np.zeros((chessboard_size,chessboard_size), dtype=np.int)
-        self.anfangtifet = 4 # initial depth
+        self.anfangtifet = 2 # initial depth
 
     # If your are the first, this function will be used.
     def first_chess(self):
@@ -137,15 +137,21 @@ class AI(object):
                 new_pos1 = chess[1]+j
                 if new_pos0 > self.chessboard_size-1:
                     continue
+                    #print("new_pos0>14: %d"%(new_pos0))
                 elif new_pos0 < 0 :
+                    #new_pos0 = 0
                     continue
                 if new_pos1 > self.chessboard_size-1:
+                    #new_pos1 = self.chessboard_size-1
                     continue
                 elif new_pos1 < 0:
+                    #new_pos1 = 0
                     continue
                 if source_chessboard[new_pos0, new_pos1] != 0:
                     neighbor_points.append(chess)
                     break
+                    #ihf (new_pos not in neighbor_points) and (new_pos not in pos_package):
+                    #    neighbor_points.append(new_pos)
         #print(neighbor_points)
         #print("new_pos: %d"%(len(neighbor_points)))
         # sort the point return max point positio
@@ -253,7 +259,7 @@ class AI(object):
         #for i in range(0, self.chessboard_size):
             #print(i)
             if chess_line[i] == chess_color: # 找到己方棋子
-               # 还原计算
+                # 还原计算
                 continue_point = 1
                 block_point = 0
                 # check left side if exit opponent's chess
@@ -296,6 +302,7 @@ class AI(object):
             elif continue_point == 3: return score_map['BLOCKED_THREE']
             elif continue_point == 4: return score_map['BLOCK_FOUR']
             else: return score_map['LINEFIVE']
+            #print("Test label")
         else: # both two side are opponent's chess
             #print("死")
             if continue_point>= 5: return score_map['LINEFIVE']
