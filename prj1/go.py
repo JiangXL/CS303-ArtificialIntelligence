@@ -27,7 +27,7 @@ class AI(object):
         self.candidate_list = []
         self.debug = 0
         self.chessboard = np.zeros((chessboard_size,chessboard_size), dtype=np.int)
-        self.anfangtifet = 4 # initial depth
+        self.anfangtifet = 2 # initial depth
 
     # If your are the first, this function will be used.
     def first_chess(self):
@@ -146,9 +146,22 @@ class AI(object):
                 if source_chessboard[new_pos0, new_pos1] != 0:
                     neighbor_points.append(chess)
                     break
-        #print(neighbor_points)
-        #print("new_pos: %d"%(len(neighbor_points)))
-        # sort the point return max point positio
+        # sort the point return max point position
+        '''
+        for point in neighbor_points:
+            x = point[0]
+            y = point[1]
+            if self.line5detect(source_chessboard, x, y):
+                swap(neighbor_points[0], neighbor_points[neighbor_points.index(point)])
+                break
+            elif self.live4detect(source_chessboard,x,y):
+                #print(neighbor_points[neighbor_points.index(point)])
+                #swap(neighbor_points[-1], neighbor_points[neighbor_points.index(point)])
+                break
+            elif self.double3detect(source_chessboard, x,y):
+                #swap(neighbor_points[1], neighbor_points[neighbor_points.index(point)])
+                break
+        '''
         '''
         line5 = self.line5detect(chessboard, x, y)
         if line5 :
@@ -247,30 +260,35 @@ class AI(object):
         linevalue = 0  # return value
         continue_point = 0 # 连子数
         block_point = 0 # 封闭
+        jump = 0 # 跳
         # scan chess line to find style
         i = 0
         while(i<self.chessboard_size):
-        #for i in range(0, self.chessboard_size):
-            #print(i)
             if chess_line[i] == chess_color: # 找到己方棋子
-               # 还原计算
+                # 还原计算
                 continue_point = 1
                 block_point = 0
                 # check left side if exit opponent's chess
                 if chess_line[i-1] == -chess_color : block_point+=1
                 # check linked chess
                 i+=1
-                while (i<self.chessboard_size and chess_line[i] == chess_color):
+                while ((i<self.chessboard_size) and (chess_line[i] != -chess_color)):
+                    if chess_line[i] == 0 and chess_line[i+1]==chess_color :
+                        jump +=1 # 暂时忽略跳子
+                    elif chess_line[i] == chess_color:
+                        continue_point+=1
+                    else:
+                        i+=1
+                        break
                     i+=1
-                    continue_point+=1
                 if chess_line[i] == -chess_color: block_point+=1 # 边界也算冲
                 #print("Label%d %d"%(continue_point, block_point))
-                linevalue += self.mapValue(continue_point, block_point)
+                linevalue += self.mapValue(continue_point, block_point, jump)
             i+=1
         return linevalue
 
     # maping score from chess style
-    def mapValue(self, continue_point, block_point):
+    def mapValue(self, continue_point, block_point, jump):
         #print("Map chess style to value")
         score_map={'DEADZERO': 0,
                    'LIVEONE': 10,
@@ -300,3 +318,99 @@ class AI(object):
             #print("死")
             if continue_point>= 5: return score_map['LINEFIVE']
             else: return score_map['DEADZERO']
+
+    def line5detect(self, chessboard, x, y):
+        #print("Detect line5 on (%d, %d)"%(x, y))
+        result = 0
+        for i in range(-4,5): # Todo: this range is over
+            if x+i>-1 and x+i+4<self.chessboard_size : # check in horizontal
+                #print("Searching in horizontal (%d, %d)"%(y,x+i))
+                temp_x = self.color*sum(chessboard[y,x+i:x+i+4])
+                if temp_x == 4 :
+                    result = 1
+                    break
+                elif temp_x == -4 :
+                    result = 1
+                    print("Found opponent's horizontal line5 in %d"%(y))
+            if y+i>-1 and y+i+4<self.chessboard_size :      # check in vertical
+                temp_y = self.color*sum(chessboard[y+i:y+i+4,x])
+                if temp_y == 4 :
+                    result = 1
+                    print("Found our vertical line5 in %d"%(x))
+                    break
+                elif temp_y == -4:
+                    print("Found opponent's vertical line5 in %d"%(x))
+                    result = 1
+                if x+i>-1 and x+i+4<self.chessboard_size :  # check in diagonal
+                    temp_sum = 0
+                    for j in range (0,5):
+                        temp_sum += chessboard[y+i+j, x+i+j]
+                    temp_d = self.color*temp_sum
+                    if temp_d == 4:
+                        result = 1
+                        print("Found our Line5 diagonal")
+                        break
+                    elif temp_d == -4:
+                        result = 1
+                        print("Found opponent line5 diagonal")
+        return result
+
+    def live4detect(self, chessboard, x, y):
+        result = 0
+        pattern = self.color*np.array([0,1,1,1,1,0])
+        #print("Checking point live4 (%d, %d)"%(x,y))
+        temp_y = 0
+        temp_x = 0
+        temp_d = 0 # in diagose
+        for i in range(-3,1):
+            if (x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in horizontal
+                temp_x = np.dot(pattern, chessboard[y, x+i-1:x+i+5])
+                #print("Check live4 in horizon %s"%(chessboard[y,x+i-1:x+i+5]))
+            if (y+i-1 > -1) and (y+i+4 < self.chessboard_size) : # in vertical
+                temp_y = np.dot(pattern, chessboard[y+i-1:y+i+5, x])
+                array_d = np.zeros(6)
+                if(x+i-1 > -1) and (x+i+4 < self.chessboard_size) : # in diag
+                    for j in range(0,6):
+                        #print( chessboard[y+i-1+j, x+i-1+j])
+                        array_d[j]=chessboard[y+i-1+j, x+i-1+j]
+                    temp_d = np.dot(array_d, pattern)
+            #print("temp_x:%d"%(temp_x))
+            if (temp_x == 3) or (temp_y == 3) or (temp_d == 3):
+                print("Biuld live4!(%d, %d)"%(x,y))
+                result = 1
+                #self.live4_flag = 1                # mark for next step
+                break
+            elif (temp_x == -3) or (temp_y == -3) or (temp_d == -3):
+                #print("Found oppoent's live4 on (%d, %d)"%(x,y))
+                result = 1
+        return result
+
+    def double3detect(self, chessboard, x, y):
+        #print("Double3 detecting on (%d, %d)"%(x, y))
+        result = 0
+        temp_x1 = 0
+        temp_x2 = 0
+        temp_y1 = 0
+        temp_y2 = 0
+        pattern = self.color*np.array([0,1,1,0])
+        # in horizontal
+        if x-3 > -1 :
+            #print(chessboard[y, x-3:x+1])
+            temp_x1 = np.dot(pattern, chessboard[y, x-3:x+1])
+        elif x+4 < self.chessboard_size :
+            #print(chessboard[y, x:x+4])
+            temp_x2 = np.dot(pattern, chessboard[y, x:x+4])
+        # in vectical
+        if y-3 > -1 :
+            temp_y1 = np.dot(pattern, chessboard[y-3:y+1, x])
+        elif y+4 < self.chessboard_size :
+            temp_y2 = np.dot(pattern, chessboard[y:y+4, x])
+        # combine horizontal and vectical
+        if (temp_x1 == 2 or temp_x2 == 2) and (temp_y1==2 or temp_y2==2):
+            print("Found our double3 (%d, %d)"%(x, y))
+            result = 1
+        elif (temp_x1 == -2 or temp_x2 == -2) and (temp_y1==-2 or temp_y2==-2):
+            result = 1
+            print("Found opponent's double3 (%d, %d)"%(x, y))
+        return result
+

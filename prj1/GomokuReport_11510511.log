@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2018.10.30)  31 OCT 2018 20:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2018.10.31)  31 OCT 2018 23:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -227,72 +227,70 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ) (./GomokuReport_11510511.aux)
 \openout1 = `GomokuReport_11510511.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
 
 -- Lines per column: 58 (exact).
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 57.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 37.
 (/usr/share/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.05249> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 57.
-
-
-LaTeX Warning: Citation `1' on page 1 undefined on input line 66.
-
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 98
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 37.
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 78
 .
 
-Underfull \hbox (badness 4872) in paragraph at lines 116--117
-[]\OT1/ptm/m/n/10.03749 alphaBeta: min-Max tree and alpha-beta
+Underfull \hbox (badness 2961) in paragraph at lines 97--98
+[]\OT1/ptm/b/n/10.03749 alphaBeta\OT1/ptm/m/n/10.03749 : min-Max tree and alpha
+-beta
  []
 
 
-Underfull \hbox (badness 4531) in paragraph at lines 117--118
-[]\OT1/ptm/m/n/10.03749 genNext: gen-er-ate avail-able po-si-tion on
+Underfull \hbox (badness 3780) in paragraph at lines 98--99
+[]\OT1/ptm/b/n/10.03749 genNext\OT1/ptm/m/n/10.03749 : gen-er-ate avail-able po
+-si-tion on
  []
 
 
-Underfull \hbox (badness 1895) in paragraph at lines 118--119
-[]\OT1/ptm/m/n/10.03749 evaluateState: eval-u-ate cur-rent chess-board
- []
-
-
-Overfull \hbox (6.59377pt too wide) in paragraph at lines 135--136
+Overfull \hbox (6.59377pt too wide) in paragraph at lines 118--119
 [] []$\OML/cmm/m/it/10 source[]chessboard; depth; alpha; beta; chess[]color$ 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 147.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 130.
 
 (/usr/share/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.03749> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 147.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
 
-Underfull \hbox (badness 10000) in paragraph at lines 159--160
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
 [] []$\OML/cmm/m/it/10 candidate[]list:append\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 
 max[]point\OT1/cmr/m/n/10 )$ \OMS/cmsy/m/n/10 f\OT1/ptm/m/n/10.03749 add max
  []
 
 
-Underfull \vbox (badness 2005) has occurred while \output is active []
+Underfull \vbox (badness 1371) has occurred while \output is active []
 
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
+Underfull \hbox (badness 2096) in paragraph at lines 168--182
+[]\OT1/ptm/b/n/10.03749 evaluateState\OT1/ptm/m/n/10.03749 : re-turn cur-rent c
+hess-board lay-out
+ []
+
 
 ! LaTeX Error: Something's wrong--perhaps a missing \item.
 
@@ -300,7 +298,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.214        \IF{$point == chess\_color$}
+l.197        \IF{$point == chess\_color$}
                                          
 ? 
 
@@ -310,7 +308,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.214        \IF{$point == chess\_color$}
+l.197        \IF{$point == chess\_color$}
                                          
 ? 
 
@@ -320,7 +318,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.214        \IF{$point == chess\_color$}
+l.197        \IF{$point == chess\_color$}
                                          
 ? 
 
@@ -330,29 +328,31 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.215          \STATE
+l.198          \STATE
                       $continue\_point \leftarrow 1$
 ? 
 
-Underfull \hbox (badness 4582) in paragraph at lines 221--221
+Underfull \hbox (badness 4582) in paragraph at lines 204--204
 [] []\OT1/ptm/b/n/10.03749 while $\OML/cmm/m/it/10 point$ \OT1/ptm/m/n/10.03749
  still in $\OML/cmm/m/it/10 line$ \OT1/ptm/b/n/10.03749 and $\OML/cmm/m/it/10 p
 oint \OT1/cmr/m/n/10 ==
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 228--229
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
 [] []$\OML/cmm/m/it/10 score \OMS/cmsy/m/n/10   \OML/cmm/m/it/10 score \OT1/cmr
 /m/n/10 +
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 240--242
+Underfull \hbox (badness 10000) in paragraph at lines 223--225
 []\OT1/ptm/m/n/10.03749 Empirical ver-i-fi-ca-tion is com-pared with given
  []
 
 [2]
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 277.
+Underfull \hbox (badness 10000) in paragraph at lines 253--255
+[]\OT1/ptm/m/n/8.03 Wikipedia con-trib-u-tors, [On-line], Avail-able:
+ []
 
 
 ** Conference Paper **
@@ -367,30 +367,24 @@ Before submitting the final camera ready copy, remember to:
 
 [3
 
-] (./GomokuReport_11510511.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+] (./GomokuReport_11510511.aux) ) 
 Here is how much of TeX's memory you used:
- 2286 strings out of 492642
- 34400 string characters out of 6135565
+ 2256 strings out of 492642
+ 34014 string characters out of 6135565
  120784 words of memory out of 5000000
- 6181 multiletter control sequences out of 15000+600000
- 41421 words of font info for 80 fonts, out of 8000000 for 9000
+ 6160 multiletter control sequences out of 15000+600000
+ 36101 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
- 27i,7n,21p,252b,693s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-di
-st/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/time
-s/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GomokuReport_11510511.pdf (3 pages, 95592 bytes).
+ 27i,7n,21p,252b,695s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/base/8r
+.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sha
+re/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/
+texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/
+urw/times/utmri8a.pfb>
+Output written on GomokuReport_11510511.pdf (3 pages, 95302 bytes).
 PDF statistics:
  47 PDF objects out of 1000 (max. 8388607)
  33 compressed objects within 1 object stream
