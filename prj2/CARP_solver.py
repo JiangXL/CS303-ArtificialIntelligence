@@ -93,7 +93,7 @@ def better(now, pre):
     np.random.seed(seed)
     return np.random.random() > 0.5
 
-# usine path Scanning to choose suitable point
+# using path Scanning to choose suitable point
 def pathScan(required_graph, cost_graph, shortest_dist):
     if debug: print("Path-Scanning")
     R = []      # successive routes
@@ -113,9 +113,8 @@ def pathScan(required_graph, cost_graph, shortest_dist):
         while(len(free) > 0): # choose one or more required edge to carry
             d = infinity      # reset shortest distance away source
             e_candidate = -1  # reset candidate edge
-            mid_path = []
             for e in free:    # choose one required edge
-                if (load_k + required_graph[e] < capacity):
+                if (load_k + required_graph[e] <= capacity):
                     dist_now = shortest_dist[i, e[0]][0]
                     if dist_now < d : # closest path  betweent 2 vertex
                         d = dist_now
@@ -123,8 +122,8 @@ def pathScan(required_graph, cost_graph, shortest_dist):
                     elif (dist_now == d) and better(e, e_candidate):
                         e_candidate = e
             if(d == infinity): break # equal to : car is full
-            for each in shortest_dist[i, e_candidate[0]][1]: # add middle path
-                R_k.append(each)
+            #for each in shortest_dist[i, e_candidate[0]][1]: # add middle path
+                #R_k.append(each)
             R_k.append(e_candidate)
             load_k = load_k + required_graph[e_candidate] # update car k's load
             cost_k = cost_k + d + cost_graph[e_candidate] # update car k's cost
@@ -133,10 +132,18 @@ def pathScan(required_graph, cost_graph, shortest_dist):
             free.remove(e_candidate) # pop chosen edge from required_edges set
             free.remove((e_candidate[-1], e_candidate[0])) # opposite egde
         cost_k = cost_k + shortest_dist[(i,1)][0] # add back home distance
-        if debug:
-            print("Backing home", shortest_dist[(i,1)][1], 'Cost',shortest_dist[(i,1)][0])
-        for each in shortest_dist[i, 1][1]:       # add middle path
-            R_k.append(each)
+        #if debug:
+            #print("Backing home", shortest_dist[(i,1)][1], 'Cost',shortest_dist[(i,1)][0])
+        #for each in shortest_dist[i, 1][1]:       # add back home path
+        #    R_k.append(each)   # issue: avoid to walk with required
+            # back as
+        R_k_back = R_k.copy()
+        R_k_back.reverse()
+        #print(R_k)
+        for cnt in range(len(R_k_back)):
+            R_k_back[cnt]=(R_k_back[cnt][-1],R_k_back[cnt][0])
+        #R_k = R_k + R_k_back
+        #print(R_k_back)
         R.append(R_k) # add each route together after car is full or no require
         cost = cost + cost_k
     return R, cost
@@ -161,6 +168,7 @@ if __name__ == "__main__" :
         time_limit = int(sys.argv[3])
         seed = int(sys.argv[5])
     # Generate graph form data file
+    #print(file_name)
     graph_demand, graph_cost, capacity = generateGraph(file_name)
     # Generate shortest distance of two vertex
     shortest_dist = genDijkstraDist(graph_demand, graph_cost)
