@@ -7,8 +7,9 @@ import sys
 import numpy as np
 
 # some global constant
-infinite = 999999999
+infinity = 999999999
 capacity = 0
+undefined = 0
 
 def generateGraph(path):
     graph_txt = open(path, "r")
@@ -22,33 +23,70 @@ def generateGraph(path):
     capacity = int(graph_txt.readline()[11:-1])
     total_cost = int(graph_txt.readline()[31:-1])
     graph_txt.readline() # pass by
-    graph_dm = np.zeros([required_edges, required_edges])
-
-    graph_ct = np.zeros([required_edges +no_required_edges, required_edges + no_required_edges])
-
+    #graph_dm = np.zeros([required_edges, required_edges])
+    graph_dm ={} # graph={(node-node):(cost, demand)}
+    #graph_ct = np.zeros([required_edges +no_required_edges, required_edges + no_required_edges])
+    graph_ct = {}
     for i in range(required_edges + no_required_edges):
         line = graph_txt.readline().split()
         if int(line[3]) > 0 :
             graph_dm[(int(line[0]), int(line[1]))] = int(line[3])
+            graph_dm[(int(line[1]), int(line[0]))] = int(line[3])
         graph_ct[(int(line[0]), int(line[1]))] = int(line[2])
+        graph_ct[(int(line[1]), int(line[0]))] = int(line[2])
     return graph_dm, graph_ct
 
 # cal dijkstra distance
-def dijkstra(graph, source):
+def dijkstra(dm_graph, cost_graph, source):
     print("find shortest distance")
+    # search the short dist awya from souce
     Q = []
-    dist = []
-    prev = []
-    for vertex in g:
-        pre;
-    print(S)
-    U = {}
+    dist = [] # distance
+    prev = [] # previous path
+    for edge in cost_graph.keys():
+        vertex = edge[0]
+        dist.append(infinity) # unknow distance from source to vertex
+        prev.append(undefined) # previous node in optimal path from source
+        # prev[source] = undefined
+        Q.append(vertex)
+    dist[source]= 0 # distance from source to source
+    while len(Q)> 0 :
+        #u = .index(min(Q)) # node with least distance
+        shortest_distance = infinity
+        for vertex in Q:
+            if dist[vertex] < shortest_distance:
+                u = vertex
+                shortest_distance = dist[vertex]
+        print(Q)
+        print(u)
+        Q.remove(u)
+        neighbor = []
+        for edge in cost_graph.keys():
+            if edge[0] == u and edge[1] in Q:
+                neighbor.append(edge[1])
+        for u_nb in neighbor:
+            alt = dist[u_nb] + cost_graph[(u, u_nb)]
+            if alt < dist[u_nb]:
+                dist[u_nb] = alt
+                prev[u_nb] = u
     return dist, prev
 
 # return a martix with min distance betweent two points
-def genDijkstraDist(graph_dm, graph_ct):
-    shortestDist={}  # shortest distance and path betweent required edge
-    dist, prev = dijkstra(graph_ct, pivot)
+def genDijkstraDist(dm_graph, cost_graph):
+    shortestDist={}  # shortestDist={(vertex1,vertex2):(shortestDist, path[])}
+    for source in dm_graph:
+        pivot = source[0]
+        dist, prev = dijkstra(dm_graph, cost_graph, pivot)
+        shortestDist_pivot={}
+        for target in dm_graph:
+            u = target[1]
+            shortestPath=[]
+            k = u
+            if not(prev[k] is undefined) or k == pivot:
+                while (k is undefined) :
+                    shortestPath.insert(0,k)
+                    k = prev[k]
+            shortestDist[(pivot, u)]=(dist[u], prev)
     print("dict of shortest distance")
     return shortestDist
 
@@ -72,9 +110,9 @@ def pathScan(required_graph, cost_graph, capacity, shortest_dist):
         load_k = 0 # this car load
         cost_k = 0 # this car cost
         i = 1      # each car start from depot
-        while(len(free) > 0  and not(d == infinite)): #
+        while(len(free) > 0  and not(d == infinity)): #
             print("Searching inside required graph")
-            d = infinite    # reset distance
+            d = infinity    # reset distance
             u_candidate = 0 # reset candidate edge
             for u in free.keys() and (cost_k + load_k + required_graph[u] < capacity):
                 if shortest_dist[i,u[0]] < d : # closest path  betweent 2 vertex
