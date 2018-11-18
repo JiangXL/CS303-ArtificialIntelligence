@@ -1,7 +1,7 @@
 #!/bin/python3
 '''
 Description: CARP
-Data       : 20181114
+Data       : 20181118
 '''
 import sys
 import numpy as np
@@ -10,6 +10,7 @@ import numpy as np
 infinity = 999999999
 capacity = 0
 undefined = 0
+debug = 0
 
 def generateGraph(path):
     graph_txt = open(path, "r")
@@ -34,102 +35,111 @@ def generateGraph(path):
             graph_dm[(int(line[1]), int(line[0]))] = int(line[3])
         graph_ct[(int(line[0]), int(line[1]))] = int(line[2])
         graph_ct[(int(line[1]), int(line[0]))] = int(line[2])
-    return graph_dm, graph_ct
+    return graph_dm, graph_ct, capacity
 
-# cal dijkstra distance
+## search the shortest distance away from souce
 def dijkstra(dm_graph, cost_graph, source):
-    print("find shortest distance")
-    # search the short dist awya from souce
+    #print("find shortest distance")
     Q = []
     dist = [] # distance
     prev = [] # previous path
     for edge in cost_graph.keys():
         vertex = edge[0]
-        dist.append(infinity) # unknow distance from source to vertex
+        dist.append(infinity)  # unknow distance from source to vertex
         prev.append(undefined) # previous node in optimal path from source
         # prev[source] = undefined
         Q.append(vertex)
     dist[source]= 0 # distance from source to source
-    while len(Q)> 0 :
-        #u = .index(min(Q)) # node with least distance
+    #print('dist', len(dist))
+
+    while len(Q) > 0 :
         shortest_distance = infinity
-        for vertex in Q:
-            if dist[vertex] < shortest_distance:
+        for vertex in Q: # find clost vertex
+            if dist[vertex] <= shortest_distance:
                 u = vertex
                 shortest_distance = dist[vertex]
-        print(Q)
-        print(u)
         Q.remove(u)
         neighbor = []
         for edge in cost_graph.keys():
             if edge[0] == u and edge[1] in Q:
                 neighbor.append(edge[1])
         for u_nb in neighbor:
-            alt = dist[u_nb] + cost_graph[(u, u_nb)]
+            alt = dist[u] + cost_graph[(u, u_nb)]
             if alt < dist[u_nb]:
                 dist[u_nb] = alt
                 prev[u_nb] = u
     return dist, prev
 
-# return a martix with min distance betweent two points
+# Return a martix with min distance betweent two points
 def genDijkstraDist(dm_graph, cost_graph):
-    shortestDist={}  # shortestDist={(vertex1,vertex2):(shortestDist, path[])}
+    shortestDist={}  # ShortestDist={(vertex1,vertex2):(shortestDist, path[])}
     for source in dm_graph:
         pivot = source[0]
         dist, prev = dijkstra(dm_graph, cost_graph, pivot)
         shortestDist_pivot={}
-        for target in dm_graph:
-            u = target[1]
+        for target_edge in dm_graph:
+            target_vertex = target_edge[1]
             shortestPath=[]
-            k = u
-            if not(prev[k] is undefined) or k == pivot:
-                while (k is undefined) :
-                    shortestPath.insert(0,k)
-                    k = prev[k]
-            shortestDist[(pivot, u)]=(dist[u], prev)
-    print("dict of shortest distance")
+            k = target_vertex # Construct shortest path with stack S
+            while not(prev[k] is undefined) :
+                shortestPath.insert(0,(prev[k],k))
+                k = prev[k]
+            shortestDist[(pivot, target_vertex)]=(dist[target_vertex], shortestPath)
     return shortestDist
 
-# sub rule to choose candidate point
+# Subrule to choose candidate point
 def better(now, pre):
-    print("choose better point ")
+    #print("choose better point ")
     np.random.seed(seed)
     return np.random.random() > 0.5
 
 # usine path Scanning to choose suitable point
-def pathScan(required_graph, cost_graph, capacity, shortest_dist):
-    print("path-Scanning")
-    R = [] # successive routes
-    #free = required_graph  # copy required_edges from graph
-    free = [(1,1)] # should be two direction
-    k = 0 # required_edges label
-    d = 0 # shortest distance away from source(initialize at source)
-    while( len(free) > 0 ) : # for remaining required edge
+def pathScan(required_graph, cost_graph, shortest_dist):
+    if debug: print("Path-Scanning")
+    R = []      # successive routes
+    free = []   # copy required_edges from graph
+    for each in required_graph.keys():
+        free.append(each)
+    k = 0       # car number(start from 1)
+    cost = 0    # total cost to finish all required edge
+    while( len(free) > 0 ) : # if still remain required edge, new car
         k = k + 1  # car number
         R_k = []   # this car route set
+        cost_k = 0 # car k cost
         load_k = 0 # this car load
-        cost_k = 0 # this car cost
         i = 1      # each car start from depot
-        while(len(free) > 0  and not(d == infinity)): #
-            print("Searching inside required graph")
-            d = infinity    # reset distance
-            u_candidate = 0 # reset candidate edge
-            for u in free.keys() and (cost_k + load_k + required_graph[u] < capacity):
-                if shortest_dist[i,u[0]] < d : # closest path  betweent 2 vertex
-                    d = shortest_dist[i, u[0]]
-                    u_candidate = u
-                elif (shortest_dist[i, u[0]] == d) and better(u, u_candidate):
-                    u_candidate = u
-            R_k.append(u_candidate) ## TODO: should add no no_required_edges
-            load_k = load_k + required_edges(u_candidate) # update load
-            cost_k = cost_k + d + cost_graph[u_candidate]# update cost
-            i = u_candidate[-1] # update u_candidate end vertex to new start
-            free.remove((u_candidate[-1], u_candidate[0])) # opposite egde
-            free.remove(u_candidate) # pop chosen edge from required_edges set
+        if debug: print("\n\nCar:", k, " Remaining require(%d):"%len(free), free)
+        if debug: print("Searching in remaining required edge")
+        while(len(free) > 0): # choose one or more required edge to carry
+            d = infinity      # reset shortest distance away source
+            e_candidate = -1  # reset candidate edge
+            mid_path = []
+            for e in free:    # choose one required edge
+                if (load_k + required_graph[e] < capacity):
+                    dist_now = shortest_dist[i, e[0]][0]
+                    if dist_now < d : # closest path  betweent 2 vertex
+                        d = dist_now
+                        e_candidate = e
+                    elif (dist_now == d) and better(e, e_candidate):
+                        e_candidate = e
+            if(d == infinity): break # equal to : car is full
+            for each in shortest_dist[i, e_candidate[0]][1]: # add middle path
+                R_k.append(each)
+            R_k.append(e_candidate)
+            load_k = load_k + required_graph[e_candidate] # update car k's load
+            cost_k = cost_k + d + cost_graph[e_candidate] # update car k's cost
+            i = e_candidate[-1] # update u_candidate end vertex to new start
+            if debug: print('Choose ',e_candidate,'than',e,'Load:', load_k)
+            free.remove(e_candidate) # pop chosen edge from required_edges set
+            free.remove((e_candidate[-1], e_candidate[0])) # opposite egde
+        cost_k = cost_k + shortest_dist[(i,1)][0] # add back home distance
+        if debug:
+            print("Backing home", shortest_dist[(i,1)][1], 'Cost',shortest_dist[(i,1)][0])
+        for each in shortest_dist[i, 1][1]:       # add middle path
+            R_k.append(each)
         R.append(R_k) # add each route together after car is full or no require
-        cost_k = cost_k + shortest_dist((i,1)) # add back home distance
-        print("Dealing with required_edges:", k)
-    return R, cost_k
+        cost = cost + cost_k
+    return R, cost
 
 # formatlize output string
 def s_format(s):
@@ -151,14 +161,15 @@ if __name__ == "__main__" :
         time_limit = int(sys.argv[3])
         seed = int(sys.argv[5])
     # Generate graph form data file
-    graph_demand, graph_cost = generateGraph(file_name)
+    graph_demand, graph_cost, capacity = generateGraph(file_name)
     # Generate shortest distance of two vertex
     shortest_dist = genDijkstraDist(graph_demand, graph_cost)
+    #print(shortest_dist)
     # Return final decision
-    result_path, final_cost = pathScan(graph_demand, graph_cost, capacity, shortest_dist)
+    result_path, final_cost = pathScan(graph_demand, graph_cost, shortest_dist)
 
-    print("\nOutput result:")
-    s = [[(1,2),(2,3),(3,8),(8,12),(12,10),(10,9),(9,1)],[(1,4),(4,2),(2,7),(7,4),(4,6),(6,11)],[(1,10),(12,11),(11,4),(4,3),(3,9),(9,8),(8,1)],[(1,11),(6,5),(5,2),(7,5),(5,1)]]
-    cost = 275
-    print("s", (",".join(str(d) for d in s_format(s))).replace(" ", ""))
+    #print("\nOutput result:")
+    #s = [[(1,2),(2,3),(3,8),(8,12),(12,10),(10,9),(9,1)],[(1,4),(4,2),(2,7),(7,4),(4,6),(6,11)],[(1,10),(12,11),(11,4),(4,3),(3,9),(9,8),(8,1)],[(1,11),(6,5),(5,2),(7,5),(5,1)]]
+    #print("s", (",".join(str(d) for d in s_format(s))).replace(" ", ""))
+    print("s", (",".join(str(d) for d in s_format(result_path))).replace(" ", ""))
     print("q", final_cost)
