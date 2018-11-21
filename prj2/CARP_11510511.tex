@@ -11,26 +11,6 @@
   \usepackage{cite}
 \fi
 
-% *** GRAPHICS RELATED PACKAGES ***
-%
-\ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
 
 \usepackage{amsmath}
 \usepackage{algorithm, algorithmic}
@@ -43,7 +23,7 @@
 
 
 \begin{document}
-\title{Project 1: Gomoku}
+\title{Project 2: Capacitated Arc Routing Problems }
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -56,14 +36,14 @@ Email: 11510511@mail.sustc.edu.cn}}
 % make the title area
 \maketitle
 
-
 \IEEEpeerreviewmaketitle
 
 \section{Preliminaries}
+This project is don 
 This project is doing some simple implementations on Gomoku. Gomoku, also called 
 Five in a Row, is an abstract strategy board game. It is traditionally played 
 with Go pieces (black and white stones) on a Go board, using 15x15 of the 19x19
-grid intersection.[1] Gomoku has less complicity than Go, which has encouraged
+grid intersection.\cite{1} Gomoku has less complicity than Go, which has encouraged
 Deep Mind to develop powerful AI engine AlphaGo in 2016. So Gomoku will be a
 better particle for beginner. Design of Gomoku AI in this project try to
 follow the minMax tree with alpha-beta punching, which powered AI Deep Blue to
@@ -71,7 +51,7 @@ challenge top chess player successfully in the first time.
 
 \subsection{Software}
 This project is written by Python 3.7 with editor Atom and Vim. Numpy library
-is being used.
+and sys library are used.
 
 
 \subsection{Algorithm}
@@ -80,8 +60,8 @@ The method being used is recursion. I defined three group of functions in order
 to find out next chess position from input chess board. Including given
 functions, here are nine functions in go.py, and one is for testing.
 
-
 \section{Methodology}
+
 Different chess layout present different chance to win. For example, live-four
 and double-three must lead to success. So I evaluate the score of possible
 layout in final level of DFS. For every layout, I scan each line in vertical,
@@ -95,10 +75,11 @@ Some main data are maintain during process: color, candidate list, chessboard.
 Others data would be specified inside functions.
 
 \begin{itemize}
-  \item color: The chess color of current AI
-  \item candidate list: Candidate point coordination, nested list. Final tuple in
-  list would be return as final choice.
-  \item chessboard: The chessboard  layout from player.
+  \item \textbf{color}: The chess color of current AI
+  \item \textbf{candidate\_list}: Candidate point coordination, nested list.
+  Final tuple in list would be return as final choice.
+  \item \textbf{chessboard}: The chessboard  layout from player.
+  \item \textbf{depth}: The search depth
 \end{itemize}
 
 
@@ -107,17 +88,18 @@ Here list all functions in given class AI:
 \begin{itemize}
   \item Given function:
   \begin{itemize}
-    \item \_\_init\_\_: initial function, including global variables.
-    \item first\_chess: if AI is black chess, this function run.
-    \item go: receive current chessboard layout, and return AI's choice.
+    \item \textbf{\_\_init\_\_}: initial function, including global variables.
+    \item \textbf{first\_chess}: if AI is black chess, this function run.
+    \item \textbf{go}: receive current chessboard layout, and return AI's choice.
   \end{itemize}
   \item Self-defined function:
     \begin{itemize}
-      \item alphaBeta: minMax tree and alpha-beta punching.
-      \item genNext: generate available position on chessboard.
-      \item evaluateState: evaluate current chessboard score of black or white
-      \item evaluateLine: evaluate current line score of black or white
-      \item mapValue: map different chess layout in single line to score
+      \item \textbf{alphaBeta}: minMax tree and alpha-beta punching.
+      \item \textbf{genNext}: generate available position on chessboard.
+      \item \textbf{evaluateState}: evaluate current chessboard score of black
+	      or white
+      \item \textbf{evaluateLine}: evaluate current line score of black or white
+      \item \textbf{mapValue}: map different chess layout in single line to score
     \end{itemize}
 \end{itemize}
 The class AI would be executed in test platform.
@@ -126,7 +108,8 @@ The class AI would be executed in test platform.
 \subsection{Detail of Algorithm}
 Here describes some vital functions.
 \begin{itemize}
-  \item alphaBeta: use minMax tree with alpha-beta punching to choose best position
+    \item \textbf{alphaBeta}: use minMax tree with alpha-beta punching to choose
+	    best position
     \begin{algorithm}[H]
      \caption{alphaBeta}
      \begin{algorithmic}[1]
@@ -162,7 +145,7 @@ Here describes some vital functions.
      \end{algorithmic}
    \end{algorithm}
 
-   \item genNext: generate most possible position
+   \item \textbf{genNext}: generate most possible position
      \begin{algorithm}[H]
      \caption{genNext}
      \begin{algorithmic}[2]
@@ -182,7 +165,7 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
 
-  \item evaluateState: return current chessboard layout score
+  \item \textbf{evaluateState}: return current chessboard layout score
     \begin{algorithm}[H]
      \caption{evaluateState}
      \begin{algorithmic}[3]
@@ -198,7 +181,7 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
  
-   \item evaluateLine: get single line score
+   \item \textbf{evaluateLine}: get single line score
      \begin{algorithm}[H]
      \caption{evaluateLine}
      \begin{algorithmic}[4]
@@ -209,11 +192,25 @@ Here describes some vital functions.
      \STATE $score \leftarrow 0$
      \STATE $continue\_point \leftarrow 1$
      \STATE $blcok\_point \leftarrow 0$
-     \WHILE {$point$ is in $line$}
-     \STATE statements..
-     \IF {($i \ne 0$)}
-     \STATE statement..
-     \ENDIF
+     \WHILE{$point$ in $line$}
+       \COMMENT{found own chess}
+       \IF{$point == chess\_color$} 
+         \STATE $continue\_point \leftarrow 1$
+         \STATE $block\_point \leftarrow 0$
+         \IF{($point == -chess\_color$)}
+           \STATE $block\_point \leftarrow block\_point+1$
+         \ENDIF
+         \STATE $point \leftarrow$ next $point$ in $line$
+         \WHILE{$point$ still in $line$ \AND $point==chess\_color$}
+           \STATE $point \leftarrow$ next $point$ in $line$
+           \STATE $continue\_point \leftarrow continue\_point+1$
+           \IF{$point == -chess\_color$ }
+             \STATE $block\_point \leftarrow block\_point+1$
+           \ENDIF
+         \ENDWHILE
+         \STATE $score \leftarrow score+ mapValue(continue\_point, bllock\_point)$
+       \ENDIF
+       \STATE $point \leftarrow$ next $point$ in $line$
      \ENDWHILE
      \RETURN $score$
      \end{algorithmic}
@@ -227,61 +224,36 @@ Empirical verification is compared with given test\_code.py and public test
 platform.
 
 \subsection{Design}
-Successfully to evaluate chessboard score currently. But, unfortunately, this
-alphaBeta function only work right in depth of one and two. When depth is three
-and more than three, it run in wrong and slow.
-
-I defined a variable $debug$ in $\_\_init\_\_$ to print of solving chessboard
-layout, final chosen position and some other variables. Sometimes, I use
-$input()$ to pause program. Because so many data are printed in terminal, I
-output printed information to file as $python code\_test.py >> log$.
+Successfully to evaluate chessboard score currently. When depth is two, program
+output current answer within five second. When I try to run in depth of four,
+right answer almost take half of hour. In a word, more powerful evalute
+function and punching(heuristic function) are required.
 
 \subsection{Data and data structure}
-Using data provided by code\_test.py to test.
-
-Numpy matrix is used widely.
+I use test data provided by code\_test.py to test. Numpy matrix are used widely.
 
 \subsection{Performance}
-When only work in one layer, it is fast but low chance to win. More depth is
-slow.
+Right output in depth of two and time of five second. It run so slow when
+depth is four.
 
 \subsection{Result}
-Pass all simple case, but fail to some advantage case.
+Successfully pass all data set test.
 
 \subsection{Analysis}
+The evaluate chessboard layout score cost linear time. minMax tree cost most
+time. The deeper, the more time it cost.
 
+\section*{Acknowledgment}
+Thanks TA Yao Zhao who explain question and provide general method to solve it.
+And I also thanks for Kebing Sun discuss algorithm and point the output
+formation error.
 
-
-% use section* for acknowledgment
-\ifCLASSOPTIONcompsoc
-  % The Computer Society usually uses the plural form
-  \section*{Acknowledgments}
-\else
-  % regular IEEE prefers the singular form
-  \section*{Acknowledgment}
-\fi
-
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
-\bibitem{reference} xxx
-%\bibligraphy{IEEEtran, refer.bib} 
+\bibitem{1}
+Wikipedia contributors, [Online], Available: https://en.wikipedia.org/wiki/Gomoku,
+[Accessed: 31- Oct- 2018].
 \end{thebibliography}
-
-
-
-
 
 % that's all folks
 \end{document}
