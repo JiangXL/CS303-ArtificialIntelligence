@@ -163,7 +163,6 @@ if __name__ == "__main__" :
         time_limit = int(sys.argv[3])
         seed = int(sys.argv[5])
     # Generate graph form data file
-    #print(file_name)
     generateGraph(file_name)
     # Generate shortest distance of two vertex
     shortest_dist = genDijkstraDist()
@@ -172,7 +171,5 @@ if __name__ == "__main__" :
     result_path, final_cost = pathScan(shortest_dist)
 
     #print("\nOutput result:")
-    #s = [[(1,2),(2,3),(3,8),(8,12),(12,10),(10,9),(9,1)],[(1,4),(4,2),(2,7),(7,4),(4,6),(6,11)],[(1,10),(12,11),(11,4),(4,3),(3,9),(9,8),(8,1)],[(1,11),(6,5),(5,2),(7,5),(5,1)]]
-    #print("s", (",".join(str(d) for d in s_format(s))).replace(" ", ""))
     print("s", (",".join(str(d) for d in s_format(result_path))).replace(" ", ""))
     print("q", final_cost)

@@ -39,7 +39,9 @@ Email: 11510511@mail.sustc.edu.cn}}
 \IEEEpeerreviewmaketitle
 
 \section{Preliminaries}
-This project is don 
+This project is an implementations of Path-Scanning and Dijkstra's algorithm to
+solve the capacitated arc routing problems(CARP). 
+
 This project is doing some simple implementations on Gomoku. Gomoku, also called 
 Five in a Row, is an abstract strategy board game. It is traditionally played 
 with Go pieces (black and white stones) on a Go board, using 15x15 of the 19x19
@@ -53,14 +55,18 @@ challenge top chess player successfully in the first time.
 This project is written by Python 3.7 with editor Atom and Vim. Numpy library
 and sys library are used.
 
-
 \subsection{Algorithm}
-Depth-first search in the form of minMax tree with alpha-beta punching is used.
-The method being used is recursion. I defined three group of functions in order
-to find out next chess position from input chess board. Including given
-functions, here are nine functions in go.py, and one is for testing.
+Using Dijkstra's algorithm to calculate the closest pathway between two vertex.
+Path-Scanning is used to find out task sequence for CARP. I defined three group
+of functions in order to find out optimal service sequence, including one
+function to generate cost graph and demand graph between vertex and vertex
+from provided txt file, two functions to generate shortest distance and pathway
+dictionary by Dijkstra algorithm, other are control flow and output format
+function.
+
 
 \section{Methodology}
+CARP is NP-hard problem.
 
 Different chess layout present different chance to win. For example, live-four
 and double-three must lead to success. So I evaluate the score of possible
@@ -71,148 +77,175 @@ out best choose position. To speed up minMax tree, alpha-beta punching was used
 to reduce the number of node to expand.
 
 \subsection{Representation}
-Some main data are maintain during process: color, candidate list, chessboard.
-Others data would be specified inside functions.
+Some main data are maintain during process: \textbf{capacity},\textbf{graph\_dm}
+, \textbf{graph\_ct}.
+Others data would be specified inside functions, shortest\_dist should noticed.
 
 \begin{itemize}
-  \item \textbf{color}: The chess color of current AI
-  \item \textbf{candidate\_list}: Candidate point coordination, nested list.
-  Final tuple in list would be return as final choice.
-  \item \textbf{chessboard}: The chessboard  layout from player.
-  \item \textbf{depth}: The search depth
+  \item \textbf{capacity}: The car's capacity, generated from input file.
+  \item \textbf{graph\_dm}: The graph of edge with demand and their demand,
+  generated from input file.
+  \item \textbf{graph\_ct}: The graph of edge with cost and their cost,
+  generated from input file.
+  \item \textbf{shortest\_dist}: A dictionary of shortest distance and pathway
+  between two vertexes. 
 \end{itemize}
 
 
 \subsection{Architecture}
-Here list all functions in given class AI:
+Here list all functions in given code:
 \begin{itemize}
-  \item Given function:
-  \begin{itemize}
-    \item \textbf{\_\_init\_\_}: initial function, including global variables.
-    \item \textbf{first\_chess}: if AI is black chess, this function run.
-    \item \textbf{go}: receive current chessboard layout, and return AI's choice.
-  \end{itemize}
-  \item Self-defined function:
-    \begin{itemize}
-      \item \textbf{alphaBeta}: minMax tree and alpha-beta punching.
-      \item \textbf{genNext}: generate available position on chessboard.
-      \item \textbf{evaluateState}: evaluate current chessboard score of black
-	      or white
-      \item \textbf{evaluateLine}: evaluate current line score of black or white
-      \item \textbf{mapValue}: map different chess layout in single line to score
-    \end{itemize}
+    \item \textbf{generateGraph}: Generate cost and demand graph from input file.
+    \item \textbf{dijkstra}: Calculate all vertexes closest distance and
+    pathway away from specify source.
+    \item \textbf{genDijkstraDist}: Generate each two vertexes closest distance
+    and pathway from \textbf{dijkstra} function.
+    \item \textbf{better}: Second rule to choose one vertexes from two vertex. 
+    \item \textbf{pathScan}: Path-Scanning algorithm to generate serve sequence. 
+    \item \textbf{s\_format}: Standard output function. 
+    \item \textbf{\_\_name\_\_}: Main control function. 
 \end{itemize}
-The class AI would be executed in test platform.
+The CARP\_solver would be executed in test platform.
 
 
 \subsection{Detail of Algorithm}
 Here describes some vital functions.
 \begin{itemize}
-    \item \textbf{alphaBeta}: use minMax tree with alpha-beta punching to choose
-	    best position
+    \item \textbf{generateGraph}: Generate global cost and demand graph from
+    input file.
     \begin{algorithm}[H]
-     \caption{alphaBeta}
+     \caption{generateGraph}
      \begin{algorithmic}[1]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $source\_chessboard, depth, alpha, beta, chess\_color$
-     \ENSURE  $max\_value$
-     \IF {($depth == 0$)}
-     \STATE \RETURN  evaluateState($source\_chessboard$)
-     \ENDIF
-
-     \STATE $child\_chessboard\leftarrow source\_chessboard$
-     \STATE $cadidate\_points\leftarrow genNext(child\_chessboard)$
-     \STATE $max\_value\leftarrow alpha$
-     \STATE $max\_point\leftarrow candidate\_points[0]$ 
-
-     \FOR {$point$ in  $candidate\_points$}
-     \STATE $child\_chessboard[point]\leftarrow chess\_color$ \COMMENT{action}
-     \STATE $value \leftarrow -alphaBeta(child\_chessboard, depth-1,-beta,-alpha, -chess\_color)$ \COMMENT{recursion}
-     \STATE $child\_chessboard[point]\leftarrow 0$ \COMMENT{undo action}
-     \IF {($value > max\_value$)}
-     \STATE $max\_value \leftarrow value$
-     \STATE $max\_point \leftarrow point$
-        \IF {($max_value >= beta$)}
-          \STATE break
-        \ENDIF
-     \ENDIF
+     \REQUIRE $input\_file\_name$
+     \ENSURE $ $
+     \STATE open $input\_file\_name$ as $file$ \COMMENT{open file and read line
+     by line}
+     \STATE $capacity \leftarrow $file$.readline$
+     \STATE \COMMENT{Read each line information until arrive edge information}
+     \FOR {each edge $e$}
+       \STATE split each line string into an array $line$ with 4 elements.
+       \IF{ ($line[3]$ larger than 0)} 
+          \STATE $graph\_dm$[($line$[0], $line$[1])]= $line$[3]
+          \STATE $graph\_dm[(line[1], line[0])]= line[3]$
+          \COMMENT {Only add edge to dictionary $graph\_dm$when edge has
+          demand. Both of two direction will be created.}
+       \ENDIF
+       \STATE $graph\_ct[(line[0], line[1])]= line[2]$
+       \STATE $graph\_ct[(line[1], line[0])]= line[2]$
      \ENDFOR
-     \IF{(depth == initial\_depth)}
-     \STATE $candidate\_list.append(max\_point)$ \COMMENT{add max value point to candidate list}
-     \ENDIF
-     \RETURN $max\_value$
      \end{algorithmic}
    \end{algorithm}
 
-   \item \textbf{genNext}: generate most possible position
+   \item \textbf{dijkstra}: generate closest distance and pathway away from source
      \begin{algorithm}[H]
-     \caption{genNext}
+     \caption{dijkstra}
      \begin{algorithmic}[2]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $chess\_chessboard, chess\_color$
-     \ENSURE  $score$
-     \STATE $pos \leftarrow empty position$
-     \STATE $neighbor\_points \leftarrow []$ \COMMENT{initial}
-     \FOR {$point$ in $pos$ }
-       \IF{($point$ has any neighbor in 4 direction)}
-       \STATE add $point$ to $neighbor\_points$
-       \STATE break
-       \ENDIF
+     \REQUIRE $source$
+     \ENSURE  $dist$, $prev$
+     \STATE create vertex set $Q$
+     \STATE create distance set $dist$
+     \STATE create path set $prev$
+     \FOR { each vertex $v$ in $graph\_ct$ }
+        \STATE $dist[v] \leftarrow INFINITY$
+        \STATE $prev[v] \leftarrow UNDEFINED$
+        \STATE add $v$ to $Q$
      \ENDFOR
-     \RETURN $neighbor\_points$
+     \STATE $dist[source] \leftarrow$ 0
+     \WHILE{($Q$ is not empty)}
+        \STATE $u$ $\leftarrow$ vertex in $Q$ with min $dist[u]$
+        \STATE remove $u$ from $Q$
+        \FOR {for each neighbor $v$ in $u$}
+           \STATE $alt \leftarrow dist[u] + graph\_ct(u,v)$
+           \IF {alt larger than $dist[u]$}
+              \STATE $dist[v] \leftarrow alt$
+              \STATE $prev[v] \leftarrow u$
+           \ENDIF
+        \ENDFOR
+     \ENDWHILE
+     \RETURN $dist$, $prev$
      \end{algorithmic}
      \end{algorithm}
 
-  \item \textbf{evaluateState}: return current chessboard layout score
+  \item \textbf{genDijstraDist}: generate closest distance and pathway between
+  two vertex into a dictionary $shortestDist$
     \begin{algorithm}[H]
-     \caption{evaluateState}
+     \caption{genDijstraDist}
      \begin{algorithmic}[3]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $chessboard, chess\_color$
-     \ENSURE  $score$
-     \STATE $score \leftarrow 0$ \COMMENT{Initial $score$}
-     \FOR {every $line$ in horizontal ,vertical, diagonal}
-       \STATE $score \leftarrow score + evaluateLine(line, chess\_color$)
+     \REQUIRE $ $
+     \ENSURE  $shortestDist$
+     \STATE create dictionary $shortestDist$
+     \FOR {each edge's first vertex in $graph\_dm$ as $source$ }
+       \STATE $dist$, $prev$ $\leftarrow$ dijkstra($source$) 
+       \FOR {each edge's first vertex in $graph\_dm$ as $target$ }
+         \STATE $shortestDist[source, target] \leftarrow dist$
+       \ENDFOR
      \ENDFOR
-     \RETURN $score$
+     \RETURN $shortestDist$
      \end{algorithmic}
      \end{algorithm}
  
-   \item \textbf{evaluateLine}: get single line score
+   \item \textbf{better}: choose better in pointers 
      \begin{algorithm}[H]
-     \caption{evaluateLine}
+     \caption{better}
      \begin{algorithmic}[4]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $chess_line, chess\_color$
-     \ENSURE  $score$
-     \STATE $score \leftarrow 0$
-     \STATE $continue\_point \leftarrow 1$
-     \STATE $blcok\_point \leftarrow 0$
-     \WHILE{$point$ in $line$}
-       \COMMENT{found own chess}
-       \IF{$point == chess\_color$} 
-         \STATE $continue\_point \leftarrow 1$
-         \STATE $block\_point \leftarrow 0$
-         \IF{($point == -chess\_color$)}
-           \STATE $block\_point \leftarrow block\_point+1$
+     \REQUIRE $now$, $pre$
+     \ENSURE  $Ture$ or $False$
+     \RETURN $graph\_dm[now] < graph\_dm[pre]$
+     \end{algorithmic}
+     \end{algorithm}
+ 
+   \item \textbf{pathScan}: Path Scanning algorithm to determine serve routes
+     \begin{algorithm}[H]
+     \caption{pathScan}
+     \begin{algorithmic}[4]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $shortest\_dist$
+     \ENSURE  $R$, $cost$
+     \STATE create successive routes $R$
+     \STATE copy required edge from $graph\_dm$ to $free$ 
+     \STATE $k, cost \leftarrow 0$
+     \WHILE { $free$ is not empty}
+       \STATE $k \leftarrow k+1$
+       \STATE $cost\_k, load\_k \leftarrow 0 $
+       \STATE rest successive routes $R\_k$ each time 
+       \STATE serve from origin vertex: $source \leftarrow 1$
+       \WHILE { $free$ in not empty}
+         \STATE rest shortest distance: $d \leftarrow \infty$ 
+         \STATE rest candidate serve edge: $e\_candidate \leftarrow -1$
+         \FOR {each edge $e$ in $free$}
+            \IF {$load\_k + graph\_dm[e] \le capacity$}
+               \STATE $dist\_now \leftarrow shortest\_dist[source, e.start]$
+               \IF {$dist\_now \le d$}
+                 \STATE $d \leftarrow dist\_now$
+                 \STATE $e\_candidate \leftarrow e$
+               \ELSIF {$dist\_now = d$ $\cap$ better($e$,$e\_candidate$ )}
+                 \STATE $e\_candidate \leftarrow e$
+               \ENDIF
+            \ENDIF
+         \ENDFOR
+         \IF {$e = \infty$}
+            \STATE BREAK
          \ENDIF
-         \STATE $point \leftarrow$ next $point$ in $line$
-         \WHILE{$point$ still in $line$ \AND $point==chess\_color$}
-           \STATE $point \leftarrow$ next $point$ in $line$
-           \STATE $continue\_point \leftarrow continue\_point+1$
-           \IF{$point == -chess\_color$ }
-             \STATE $block\_point \leftarrow block\_point+1$
-           \ENDIF
-         \ENDWHILE
-         \STATE $score \leftarrow score+ mapValue(continue\_point, bllock\_point)$
-       \ENDIF
-       \STATE $point \leftarrow$ next $point$ in $line$
+         \STATE add $e\_candidate$ to $R\_k$
+         \STATE $load\_k = load\_k + graph\_dm[e\_candidate]$
+         \STATE $cost\_k = cost\_k + graph\_ct[e\_candidate]$
+         \STATE $i = e\_candidate.end$
+         \STATE remove $e\_candidate$ and its opposite edge from free
+       \ENDWHILE
+       \STATE add back home distance: $cost\_k = cost\_k + shortest\_dist[i,1]$
+       \STATE add $R\_k$ to $R$
+       \STATE $cost = cost + cost\_k$
      \ENDWHILE
-     \RETURN $score$
+     \RETURN $R$, $cost$
      \end{algorithmic}
      \end{algorithm}
 
@@ -230,6 +263,7 @@ right answer almost take half of hour. In a word, more powerful evalute
 function and punching(heuristic function) are required.
 
 \subsection{Data and data structure}
+Dict, list
 I use test data provided by code\_test.py to test. Numpy matrix are used widely.
 
 \subsection{Performance}
