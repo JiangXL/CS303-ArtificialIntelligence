@@ -40,16 +40,30 @@ Email: 11510511@mail.sustc.edu.cn}}
 
 \section{Preliminaries}
 This project is an implementations of Path-Scanning and Dijkstra's algorithm to
-solve the capacitated arc routing problems(CARP). 
+solve the capacitated arc routing problems(CARP). CARP is the most typical form
+of arc routing problem, which has many application in real world, such as urban
+waste collection, post delivery. \cite{1} In the case of waste collection, some
+stresses of city has waste, cars with limit capacitated will carry the these
+waste start from depot and return again when car is full. A solution with less
+cost will be perfect.
 
-This project is doing some simple implementations on Gomoku. Gomoku, also called 
-Five in a Row, is an abstract strategy board game. It is traditionally played 
-with Go pieces (black and white stones) on a Go board, using 15x15 of the 19x19
-grid intersection.\cite{1} Gomoku has less complicity than Go, which has encouraged
-Deep Mind to develop powerful AI engine AlphaGo in 2016. So Gomoku will be a
-better particle for beginner. Design of Gomoku AI in this project try to
-follow the minMax tree with alpha-beta punching, which powered AI Deep Blue to
-challenge top chess player successfully in the first time.
+CARP can be represented formally as follows: a mixed graph $G=(V,E,A)$, with a
+set of  vertices denoted by $V$, set of edges denoted by $E$ and a set of arcs
+denoted by $A$, is given. There is a central depot vertex $dep \ni V$, where a
+set of vehicles are based. A subset $E_R \supseteq E$ composed of all the edges
+required to be served and a subset . The objective of CARP is to determine a
+set of routes for the vehicles to serve all task with minimal costs while
+satisfying\cite{1}: 
+a) Each route must start and end at $dep$
+b) The total demand serviced on each route must not exceed the vehicle's
+capacity $Q$; 
+c) Each task must be served exactly once(but the corresponding edge can be traversed more
+than once).
+
+CARP is NP-hard, various heuristics and meatheuristics are used, such as
+Augement-Merge, Path-Scanning. Here I successfully implemented Path-Scanning.
+
+% Add figure here
 
 \subsection{Software}
 This project is written by Python 3.7 with editor Atom and Vim. Numpy library
@@ -62,19 +76,16 @@ of functions in order to find out optimal service sequence, including one
 function to generate cost graph and demand graph between vertex and vertex
 from provided txt file, two functions to generate shortest distance and pathway
 dictionary by Dijkstra algorithm, other are control flow and output format
-function.
+function. Function $Better$ break the balanced status.
 
 
 \section{Methodology}
-CARP is NP-hard problem.
-
-Different chess layout present different chance to win. For example, live-four
-and double-three must lead to success. So I evaluate the score of possible
-layout in final level of DFS. For every layout, I scan each line in vertical,
-horizontal and diagonal to calculate score and sum three together valued as
-whole chess layout score. Then, all score were judged by minMax tree to found
-out best choose position. To speed up minMax tree, alpha-beta punching was used
-to reduce the number of node to expand.
+CARP is NP-hard. Path-Scanning provide a reasonable heuristic method to reduce
+the total cost. Firstly, edge with required was copy to a new list. Car begin
+its service from depot(vertex 1). Then the shortest pathway away from now
+service vertex will be choose as new service vertex while the car is not full
+and here still are required edges. Repeat above produce to clean up all required
+edges.
 
 \subsection{Representation}
 Some main data are maintain during process: \textbf{capacity},\textbf{graph\_dm}
@@ -190,7 +201,7 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
  
-   \item \textbf{better}: choose better in pointers 
+ \item \textbf{better}: choose better in pointers 
      \begin{algorithm}[H]
      \caption{better}
      \begin{algorithmic}[4]
@@ -202,6 +213,7 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
  
+
    \item \textbf{pathScan}: Path Scanning algorithm to determine serve routes
      \begin{algorithm}[H]
      \caption{pathScan}
@@ -249,33 +261,54 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
 
+
 \end{itemize}
 
 
 \section{Empirical Verification}
-Empirical verification is compared with given test\_code.py and public test
-platform.
+Empirical verification is confirmed in public test platform. Both right output
+format and reasonable routes are produced.
 
 \subsection{Design}
-Successfully to evaluate chessboard score currently. When depth is two, program
-output current answer within five second. When I try to run in depth of four,
-right answer almost take half of hour. In a word, more powerful evalute
-function and punching(heuristic function) are required.
+Dijkstra's algorithm return successfully shortest distance and pathway between
+two vertex. Path-Scanning run correctly. However, Path-Scanning don't provide
+most optimal routes in spite of the size of test data. Function $better$
 
 \subsection{Data and data structure}
-Dict, list
-I use test data provided by code\_test.py to test. Numpy matrix are used widely.
+Dictionaries and lists are used widely rather than matrix. Because the input graph
+is sparse, dictionary are always used to store graph. Global variable
+$graph\_dm$ and $graph\_ct$ are dictionary. Lists always store routes and edges
+information.
 
 \subsection{Performance}
-Right output in depth of two and time of five second. It run so slow when
-depth is four.
+Following table show different performance with different dataset.
+
+\begin{center}
+   \begin{tabular}{| l | l | l |}
+   \hline
+    Dataset  & Run Time(s) & Cost \\ \hline
+    gdb1     & 0.65        & 370  \\ 
+    gdb10    & 0.63        & 309  \\
+    val1A    & 0.68        & 212  \\
+    val4A    & 0.92        & 450  \\
+    val7A    & 4           & 334  \\
+    egl-e1-A & 0.96        & 4201 \\
+    egl-s1-A & 5.02        & 6383 \\
+   \hline
+   \end{tabular}
+\end{center}
 
 \subsection{Result}
-Successfully pass all data set test.
+Solutions are accepted for all data set test. Larger data set require more time.
 
 \subsection{Analysis}
-The evaluate chessboard layout score cost linear time. minMax tree cost most
-time. The deeper, the more time it cost.
+Because Path-Scanning is kind of greedy algorithm with heuristics, most of
+solutions are not optimal. The space cost is close to $O(n)$. First time cost
+$O(n^2)$ is in building Dijkstra's distance, which only run once. Path-Scanning
+without function $Better$ just cost $O(n)$. Total cost time most vary on 
+function $Better$. For example, if $Better$ just return random result, it will
+cost less time than comparison method. Although complex and well-design $Better$
+cost more time, it's solution is less-cost-routes.
 
 \section*{Acknowledgment}
 Thanks TA Yao Zhao who explain question and provide general method to solve it.
@@ -285,8 +318,10 @@ formation error.
 \bibliographystyle{IEEEtran}
 \begin{thebibliography}{1}
 \bibitem{1}
-Wikipedia contributors, [Online], Available: https://en.wikipedia.org/wiki/Gomoku,
-[Accessed: 31- Oct- 2018].
+Ke Tang, Yi Mei, and Xin Yao, “Memetic Algorithm With Extended Neighborhood
+Search for Capacitated Arc Routing Problems,” IEEE Transactions on Evolutionary
+Computation, vol. 13, no. 5, pp. 1151–1166, Oct. 2009.
+
 \end{thebibliography}
 
 % that's all folks

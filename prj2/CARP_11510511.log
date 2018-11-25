@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2018.10.30)  23 NOV 2018 01:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2018.10.30)  25 NOV 2018 11:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -247,40 +247,37 @@ File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.05249> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 37.
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 84
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 50
 .
 
-Underfull \hbox (badness 2042) in paragraph at lines 103--104
+Underfull \hbox (badness 2042) in paragraph at lines 115--116
 []\OT1/ptm/b/n/10.03749 pathScan\OT1/ptm/m/n/10.03749 : Path-Scanning al-go-rit
 hm to gen-er-ate
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 123.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 135.
 
 (/usr/share/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.03749> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 123.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 135.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Underfull \hbox (badness 6910) in paragraph at lines 172--190
+Underfull \hbox (badness 6910) in paragraph at lines 184--202
 []\OT1/ptm/b/n/10.03749 genDijstraDist\OT1/ptm/m/n/10.03749 : gen-er-ate clos-e
 st dis-tance and
  []
 
 
-Underfull \hbox (badness 1817) in paragraph at lines 172--190
+Underfull \hbox (badness 1817) in paragraph at lines 184--202
 \OT1/ptm/m/n/10.03749 path-way be-tween two ver-tex into a dic-tio-nary
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \hbox (badness 1596) in paragraph at lines 243--244
+Underfull \hbox (badness 1596) in paragraph at lines 256--257
 [] []\OT1/ptm/m/n/10.03749 add back home dis-tance: $\OML/cmm/m/it/10 cost[]k \
 OT1/cmr/m/n/10 = \OML/cmm/m/it/10 cost[]k \OT1/cmr/m/n/10 +
  []
@@ -289,15 +286,6 @@ OT1/cmr/m/n/10 = \OML/cmm/m/it/10 cost[]k \OT1/cmr/m/n/10 +
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2]
-Underfull \hbox (badness 10000) in paragraph at lines 256--258
-[]\OT1/ptm/m/n/10.03749 Empirical ver-i-fi-ca-tion is com-pared with given
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 288--290
-[]\OT1/ptm/m/n/8.03 Wikipedia con-trib-u-tors, [On-line], Avail-able:
- []
-
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -311,24 +299,26 @@ Before submitting the final camera ready copy, remember to:
 
 [3] (./CARP_11510511.aux) ) 
 Here is how much of TeX's memory you used:
- 2256 strings out of 492642
- 33942 string characters out of 6135565
+ 2257 strings out of 492642
+ 33945 string characters out of 6135565
  117784 words of memory out of 5000000
- 6160 multiletter control sequences out of 15000+600000
+ 6161 multiletter control sequences out of 15000+600000
  36101 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
  27i,7n,21p,244b,747s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}<
 /usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></u
-sr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fon
-ts/type1/urw/times/utmri8a.pfb>
-Output written on CARP_11510511.pdf (3 pages, 92818 bytes).
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share
+/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1
+/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+
+Output written on CARP_11510511.pdf (3 pages, 111560 bytes).
 PDF statistics:
- 43 PDF objects out of 1000 (max. 8388607)
- 30 compressed objects within 1 object stream
+ 51 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
