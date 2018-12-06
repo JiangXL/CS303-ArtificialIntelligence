@@ -15,7 +15,8 @@ import argparse
 import numpy
 
 time_budget = 0
-graph
+graph = {} # [node] = outcome out
+nodeInfo = {} # [node] = (is active, indegree)
 
 def LT(graph, seeds):
    actived = []
@@ -25,7 +26,7 @@ def LT(graph, seeds):
 
    saturation = 0
    
-   while(not saturation ): #Todo: add time limit later
+   while(not saturation ): # Todo: add time limit later
        for seed in seeds:
            for neighbour in graph:
                
