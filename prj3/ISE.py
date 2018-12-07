@@ -24,21 +24,29 @@ time_budget = 0
 node_num = 0
 isActivated = np.zeros(node_num) 
 
+def genSeeds(seed_file):
+    seeds = []
+    with open(seed_file) as f:
+        for line in f:
+            seeds.append(int(line))
+    return seeds
 
 ## Generate graph matrix and incoming degree from input txt file
 def genGraph(source_file):
     graph_txt = open(source_file, "r")
-    header = graph_txt.readline()
-    global node_num = int(header[0])
-    graph_matrix = np.zeros(node_num, node_num)
+    header = graph_txt.readline().split()
+    global node_num
+    node_num = int(header[0])
+    graph_matrix = np.zeros([node_num, node_num])
     node_incoming = np.zeros(node_num)
-    edge_num = int(header[1)
+    edge_num = int(header[1])
     for e in range(edge_num):
-        edge = graph_txt.readline()
-        source, dest, incoming = int(edge[0]), int(edge[1]), int(edge[2])
+        edge = graph_txt.readline().split()
+        #print(edge[0], int(edge[1]), float(edge[2]))
+        source, dest, incoming = int(edge[0])-1,int(edge[1])-1,float(edge[2])
         graph_matrix[dest, source] = 1
-        graph_incoming[dest] = incoming
-    return graph_matrix, incoming
+        node_incoming[dest] = incoming
+    return graph_matrix, node_incoming
 
 ## Use Linear Threshold Model
 def LT(graph, seeds):
@@ -72,14 +80,19 @@ if __name__ == '__main__':
    seed_file = args.seed_file
    model = args.model
 
-   global time_budget = args.time
+   #global time_budget
+   time_budget = args.time
+   seeds = genSeeds(seed_file)
+   print(seeds)
    netgraph, incoming = genGraph(input_file)
    print(input_file, seed_file, model, time_budget)
+   spread = 0
 
    if model is "LT":
-       return LT(netgraph, seeds)
+       spread = LT(netgraph, seeds)
    else :
-       return IC(netgraph, seeds)
+       spread = IC(netgraph, seeds)
+   print(spread)
 
 
    
