@@ -22,7 +22,6 @@ import numpy as np
 
 time_budget = 0
 node_num = 0
-isActivated = np.zeros(node_num) 
 
 def genSeeds(seed_file):
     seeds = []
@@ -49,20 +48,24 @@ def genGraph(source_file):
     return graph_matrix, node_incoming
 
 ## Use Linear Threshold Model
-def LT(graph, seeds):
-   saturation = 0
-   for seed in seeds: # use seeds activate all seed's nodes
-       isActivated[seed-1] = 1
-   # generate threshold
-   threshold = np.random.rand(node_num)
-   
-   while(not saturation ): # Todo: add time limit later
-       new_isActivated = np.dot(graph, isActivated)*incoming
-       if node_num == sum(isActivated) or sum(new_isActivated - isActivated)==0:
-           saturation = 1
-       else:
-           isActivated = new_isActivated
-   return sum(isActivated)
+def LT(graph, seeds, node_incoming):
+    print("Calculating LT")
+    isActivated = np.zeros(node_num) 
+    #global isActivated
+    saturation = 0
+    for seed in seeds: # use seeds activate all seed's nodes
+        isActivated[seed-1] = 1
+    # generate threshold
+    threshold = np.random.rand(node_num)
+    print(node_incoming)
+    while(not saturation ): # Todo: add time limit later
+        new_isActivated = (np.dot(graph, 1-isActivated)*node_incoming ) > threshold
+        if node_num == sum(isActivated) or sum(new_isActivated - isActivated)==0:
+            saturation = 1
+        else:
+            isActivated = new_isActivated
+        print(isActivated)
+    return (isActivated)
 
 
 ## Using IC Model
@@ -74,7 +77,7 @@ if __name__ == '__main__':
    parser.add_argument('-i', '--input_file', type=str, default='network.txt')
    parser.add_argument('-s', '--seed_file', type=str, default='sedds.txt')
    parser.add_argument('-m', '--model', type=str, default='IC')
-   parser.add_argument('-t', '--time', type=int, default=60)
+   parser.add_argument('-t', '--time', type=int, default=600)
    args = parser.parse_args()
    input_file = args.input_file
    seed_file = args.seed_file
@@ -88,8 +91,8 @@ if __name__ == '__main__':
    print(input_file, seed_file, model, time_budget)
    spread = 0
 
-   if model is "LT":
-       spread = LT(netgraph, seeds)
+   if model ==  "LT":
+       spread = LT(netgraph, seeds, incoming)
    else :
        spread = IC(netgraph, seeds)
    print(spread)
