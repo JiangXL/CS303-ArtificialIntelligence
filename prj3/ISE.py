@@ -19,9 +19,13 @@ import sys
 import os
 import argparse
 import numpy as np
+import time
 
 time_budget = 0
 node_num = 0
+graph = 0
+seeds = 0
+incoming = 0
 
 def genSeeds(seed_file):
     seeds = []
@@ -47,25 +51,40 @@ def genGraph(source_file):
         node_incoming[dest] = incoming
     return graph_matrix, node_incoming
 
-## Use Linear Threshold Model
+def calSpread(model):
+    t_start = time.time()
+    spread = 0
+    if model == "LT":
+        spread = LT(graph, seeds, incoming)
+        t_cost = time.time() - t_start
+        t_limit = time_budget - 10*t_cost
+        while (time.time() - t_start) < t_limit:
+            print(t_limit, time.time() - t_start)
+            t_cost = (LT(graph, seeds, incoming) + t_cost)/2
+    else:
+        spread = IC(graph, seeds, incoming)
+        t_limit = time_budget - 10*(time.time()-t_start)
+        while time.time() - t_start < t_limit:
+            t_cost = (IC(graph, seeds, incoming) + t_cost)/2
+    return t_cost
+
+# Use Linear Threshold Model
 def LT(graph, seeds, node_incoming):
-    print("Calculating LT")
-    isActivated = np.zeros(node_num) 
-    #global isActivated
+    isActivated = np.zeros(node_num) > 0
     saturation = 0
     for seed in seeds: # use seeds activate all seed's nodes
         isActivated[seed-1] = 1
     # generate threshold
-    threshold = np.random.rand(node_num)
-    print(node_incoming)
+    threshold = np.random.rand(node_num) 
+    #print(node_incoming)
     while(not saturation ): # Todo: add time limit later
         new_isActivated = (np.dot(graph, 1-isActivated)*node_incoming ) > threshold
-        if node_num == sum(isActivated) or sum(new_isActivated - isActivated)==0:
+        if node_num == sum(isActivated) or sum(new_isActivated ^ isActivated)== False:
             saturation = 1
         else:
             isActivated = new_isActivated
-        print(isActivated)
-    return (isActivated)
+        #print(isActivated)
+    return sum(isActivated==True)
 
 
 ## Using IC Model
@@ -86,15 +105,11 @@ if __name__ == '__main__':
    #global time_budget
    time_budget = args.time
    seeds = genSeeds(seed_file)
-   print(seeds)
-   netgraph, incoming = genGraph(input_file)
-   print(input_file, seed_file, model, time_budget)
-   spread = 0
+   #print(seeds)
+   graph, incoming = genGraph(input_file)
+   #print(input_file, seed_file, model, time_budget)
+   spread = calSpread(model) 
 
-   if model ==  "LT":
-       spread = LT(netgraph, seeds, incoming)
-   else :
-       spread = IC(netgraph, seeds)
    print(spread)
 
 
