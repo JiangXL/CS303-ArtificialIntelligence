@@ -1,0 +1,225 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  10 DEC 2018 13:38
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**IMP_11510511.tex
+(./IMP_11510511.tex
+LaTeX2e <2018-04-01> patch level 5
+
+! LaTeX Error: File `IEEEtran.cls' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: cls)
+
+Enter file name: n
+
+! LaTeX Error: File `n.cls' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: cls)
+
+Enter file name: ^^C
+! Undefined control sequence.
+\GenericError  ...                                
+                                                    #4  \errhelp \@err@     ...
+l.2 
+    
+? 
+! Interruption.
+\GenericError  ...                              #4
+                                                    \errhelp \@err@         ...
+l.2 
+    
+? 
+! Undefined control sequence.
+\GenericError  ...                                
+                                                  \let \@err@               ...
+l.2 
+    
+? 
+! Undefined control sequence.
+\GenericError  ...                                
+                                                  \@empty \def \MessageBreak...
+l.2 
+    
+? 
+! Undefined control sequence.
+\GenericError  ...                                
+                                                     \endgroup 
+l.2 
+    
+? 
+! Argument of \DeclareUnicodeCharacter has an extra }.
+<inserted text> 
+                \par 
+l.2 
+    
+? 
+Runaway argument?
+! Paragraph ended before \DeclareUnicodeCharacter was complete.
+<to be read again> 
+                   \par 
+l.2 
+    
+? 
+! Argument of \DeclareUnicodeCharacter has an extra }.
+<inserted text> 
+                \par 
+l.2 
+    
+? 
+Runaway argument?
+! Paragraph ended before \DeclareUnicodeCharacter was complete.
+<to be read again> 
+                   \par 
+l.2 
+    
+? 
+
+Missing character: There is no \ in font nullfont!
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.2 
+    
+? 
+Missing character: There is no e in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no Y in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no v in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no 
+ in font nullfont!
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 2--2
+[]
+ []
+
+! Missing { inserted.
+<to be read again> 
+                   \let 
+l.2 
+    
+? 
+)
+Runaway text?
+\let \def \MessageBreak  
+(inputenc)                 \def   \errmessage \ETC.
+! File ended while scanning text of \errhelp.
+<inserted text> 
+                }
+<*> IMP_11510511.tex
+                    
+? 
+
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+(Please type a command or say `\end')
+*
+! Interruption.
+<*> 
+    
+? 
+(Please type a command or say `\end')
+*
+! Interruption.
+<*> 
+    
+? 
+! Emergency stop.
+<*> 
+    
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 21 strings out of 494587
+ 359 string characters out of 6177758
+ 54888 words of memory out of 5000000
+ 3754 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 15i,0n,16p,131b,20s stack positions out of 5000i,500n,10000p,200000b,80000s
+!  ==> Fatal error occurred, no output PDF file produced!

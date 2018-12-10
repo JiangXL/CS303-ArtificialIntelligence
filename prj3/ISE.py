@@ -87,9 +87,15 @@ def LT(graph, seeds, node_incoming):
     return sum(isActivated==True)
 
 
-## Using IC Model
+## Using IC Model: the random value larget than incoming
 def IC(graph, seeds):
-    return 4
+    "Cal IC model "
+    spread = 0
+    isActivated = np.zeros(node_num) > 0
+    newActivated
+    last
+    isActivated = isActivated + nweActivated
+    return 0
 
 if __name__ == '__main__':
    parser = argparse.ArgumentParser()
