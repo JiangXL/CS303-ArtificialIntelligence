@@ -1,225 +1,206 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  10 DEC 2018 13:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdftex 2018.12.10)  11 DEC 2018 01:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **IMP_11510511.tex
 (./IMP_11510511.tex
-LaTeX2e <2018-04-01> patch level 5
-
-! LaTeX Error: File `IEEEtran.cls' not found.
-
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: cls)
-
-Enter file name: n
-
-! LaTeX Error: File `n.cls' not found.
-
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: cls)
-
-Enter file name: ^^C
 ! Undefined control sequence.
-\GenericError  ...                                
-                                                    #4  \errhelp \@err@     ...
-l.2 
-    
+l.1 \documentclass
+                  [conference,compsoc]{IEEEtran}
 ? 
 ! Interruption.
-\GenericError  ...                              #4
-                                                    \errhelp \@err@         ...
-l.2 
-    
+<to be read again> 
+                   [
+l.1 \documentclass[
+                   conference,compsoc]{IEEEtran}
 ? 
 ! Undefined control sequence.
-\GenericError  ...                                
-                                                  \let \@err@               ...
-l.2 
-    
+l.5 \ifCLASSOPTIONcompsoc
+                         
 ? 
 ! Undefined control sequence.
-\GenericError  ...                                
-                                                  \@empty \def \MessageBreak...
-l.2 
-    
+l.8   \usepackage
+                 [nocompress]{cite}
+? 
+! Extra \else.
+l.9 \else
+         
 ? 
 ! Undefined control sequence.
-\GenericError  ...                                
-                                                     \endgroup 
-l.2 
-    
+l.11   \usepackage
+                  {cite}
 ? 
-! Argument of \DeclareUnicodeCharacter has an extra }.
+! Extra \fi.
+l.12 \fi
+        
+? 
+! Undefined control sequence.
+l.13 \usepackage
+                {amsmath}
+? 
+! Undefined control sequence.
+l.14 \usepackage
+                {algorithm}
+? 
+! Undefined control sequence.
+l.15 \usepackage
+                {algorithmic}
+? 
+! Undefined control sequence.
+l.16 \renewcommand
+                  {\algorithmicrequire}{\textbf{Input:}}
+? 
+! Undefined control sequence.
+l.16 \renewcommand{\algorithmicrequire
+                                      }{\textbf{Input:}}
+? 
+! Undefined control sequence.
+l.16 \renewcommand{\algorithmicrequire}{\textbf
+                                               {Input:}}
+? 
+! Undefined control sequence.
+l.17 \renewcommand
+                  {\algorithmicensure}{\textbf{Output:}}
+? 
+! Undefined control sequence.
+l.17 \renewcommand{\algorithmicensure
+                                     }{\textbf{Output:}}
+? 
+! Undefined control sequence.
+l.17 \renewcommand{\algorithmicensure}{\textbf
+                                              {Output:}}
+? 
+! Undefined control sequence.
+l.18 \usepackage
+                {array}
+? 
+! Undefined control sequence.
+l.19 \usepackage
+                {url}
+? 
+! Undefined control sequence.
+l.23 \begin
+           {document}
+? 
+! Undefined control sequence.
+l.24 \title
+           {Project3: IMP}
+? 
+! Undefined control sequence.
+l.26 \author
+            {\IEEEauthorblockN{Yuejian MO  11510511}
+? 
+! Undefined control sequence.
+l.26 \author{\IEEEauthorblockN
+                              {Yuejian MO  11510511}
+? 
+! Undefined control sequence.
+l.27 \IEEEauthorblockA
+                      {Department of Biology\\
+? 
+! Argument of \\ has an extra }.
 <inserted text> 
                 \par 
-l.2 
-    
+<to be read again> 
+                   }
+l.29 Email: 11510511@mail.sustc.edu.cn}
+                                       }
 ? 
 Runaway argument?
-! Paragraph ended before \DeclareUnicodeCharacter was complete.
+ Southern Unviersity of Science and Technology\\ Email: 11510511@mail\ETC.
+! Paragraph ended before \\ was complete.
 <to be read again> 
                    \par 
-l.2 
-    
-? 
-! Argument of \DeclareUnicodeCharacter has an extra }.
-<inserted text> 
-                \par 
-l.2 
-    
-? 
-Runaway argument?
-! Paragraph ended before \DeclareUnicodeCharacter was complete.
 <to be read again> 
-                   \par 
-l.2 
-    
+                   }
+l.29 Email: 11510511@mail.sustc.edu.cn}
+                                       }
 ? 
-
-Missing character: There is no \ in font nullfont!
-
-! LaTeX Error: Missing \begin{document}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.2 
-    
+! Undefined control sequence.
+l.31 \maketitle
+               
 ? 
-Missing character: There is no e in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no f in font nullfont!
-Missing character: There is no Y in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no u in font nullfont!
-Missing character: There is no m in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no y in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no r in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no v in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no f in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no w in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no 
- in font nullfont!
-
-Overfull \hbox (20.0pt too wide) in paragraph at lines 2--2
-[]
- []
-
-! Missing { inserted.
-<to be read again> 
-                   \let 
-l.2 
-    
+! Undefined control sequence.
+l.33 \IEEEpeerreviewmaketitle
+                             
 ? 
-)
-Runaway text?
-\let \def \MessageBreak  
-(inputenc)                 \def   \errmessage \ETC.
-! File ended while scanning text of \errhelp.
-<inserted text> 
-                }
-<*> IMP_11510511.tex
-                    
+! Undefined control sequence.
+l.36 \section
+             {Preliminaries}
 ? 
+! Undefined control sequence.
+l.52 \subsection
+                {Software}
+? 
+! Undefined control sequence.
+l.55 \subsection
+                {Algorithm}
+? 
+! Undefined control sequence.
+l.59 \section
+             {Methodology}
+? 
+! Undefined control sequence.
+l.61 \subsection
+                {Representation}
+? 
+! Undefined control sequence.
+l.65 \subsection
+                {Architecture}
+? 
+! Undefined control sequence.
+l.68 \subsection
+                {Detail of Algorithm}
+? 
+! Undefined control sequence.
+l.71 \section
+             {Empirical Verification}
+? 
+! Undefined control sequence.
+l.74 \subsection
+                {Design}
+? 
+! Undefined control sequence.
+l.76 \subsection
+                {Data and data structure}
+? 
+! Undefined control sequence.
+l.78 \subsection
+                {Performance}
+? 
+! Undefined control sequence.
+l.80 \subsection
+                {Result}
+? 
+! Undefined control sequence.
+l.82 \subsection
+                {Analysis}
+? 
+! Undefined control sequence.
+l.86 \section
+             *{Acknowledgment}
+? 
+! Undefined control sequence.
+l.88 \bibliographystyle
+                       {IEEEtran}
+? 
+! Undefined control sequence.
+l.90 \begin
+           {thebibliography}{1}
+? 
+! Undefined control sequence.
+l.91 \bibitem
+             {reference} XXXXXXX
+? 
+[1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}] )</usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+Output written on IMP_11510511.pdf (1 page, 48062 bytes).
+PDF statistics:
+ 24 PDF objects out of 1000 (max. 8388607)
+ 16 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-(Please type a command or say `\end')
-*
-! Interruption.
-<*> 
-    
-? 
-(Please type a command or say `\end')
-*
-! Interruption.
-<*> 
-    
-? 
-! Emergency stop.
-<*> 
-    
-End of file on the terminal!
-
- 
-Here is how much of TeX's memory you used:
- 21 strings out of 494587
- 359 string characters out of 6177758
- 54888 words of memory out of 5000000
- 3754 multiletter control sequences out of 15000+600000
- 3640 words of font info for 14 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 15i,0n,16p,131b,20s stack positions out of 5000i,500n,10000p,200000b,80000s
-!  ==> Fatal error occurred, no output PDF file produced!
