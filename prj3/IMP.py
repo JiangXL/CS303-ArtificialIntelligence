@@ -2,52 +2,33 @@
 '''
 Description: Return value of the estimated influence spread with given graph
              and seeds
-Input : -i <social network> -s <seed set> -m <diffusion model> -t <time budget> 
+Input : -i <social network> -k <seed set size> -m <diffusion model> -t <time budget> 
 Output: the value of the estimated influence spread
 
 | Version | Commit
-|   0.1   |   
-
-matrix:
-      in1 in2 ... inn
-out1 [              ]
-out2 [              ]
-.    [              ]
-outn [              ]
+|   0.9   |  Using Hill Greedy
 '''
 import sys
 import os
 import argparse
-import numpy as np
 import time
 from random import *
-np.set_printoptions(threshold=np.nan)
+
 time_budget = 0
 node_num = 0
 graph_cp = {} # graph[child] = parent
 graph_pc = {} # graph[parent] = child
-seeds = [] 
 incoming = {} # incoming[node] = incoming degree
 debug = 0
 
-def genSeeds(size):
-    seeds = []
-    cnt = 1
-    for i in graph_cp.keys():
-        seeds.append(i)
-        cnt += 1 
-        if cnt > size:
-            break
-    return seeds
-
+## Hill Greedy Method
 def hill_greedy(size, model):
     ans_seed = []
     cnt = 0
     while not(cnt ==  size):
         cur_seed = ans_seed.copy()
         high = 0
-        cur_point = 1
-        #point = 1 # initial point
+        point = 1
         for node in graph_cp.keys():
             if not (node in ans_seed):
                 cur_seed.append(node)
@@ -57,11 +38,9 @@ def hill_greedy(size, model):
                     new_high = LT(graph_cp, cur_seed, incoming)
                 if high < new_high :
                     high = new_high
-                    cur_point = node
-        ans_seed.append(cur_point)
+                    point = node
+        ans_seed.append( point )
         cnt += 1
-        #print(high)
-        #print(cnt, ans_seed)
     return ans_seed
 
 ## Generate graph matrix and incoming degree from input txt file
@@ -70,7 +49,6 @@ def genGraph(source_file):
     header = graph_txt.readline().split()
     global node_num
     node_num = int(header[0])
-    #graph_matrix = np.zeros([node_num, node_num])
     node_incoming = {}
     cp_graph = {}
     pc_graph = {}
@@ -80,11 +58,11 @@ def genGraph(source_file):
         pc_graph[v]=[]
     for e in range(edge_num):
         edge = graph_txt.readline().split()
-        #print(edge[0], int(edge[1]), float(edge[2]))
         (pc_graph[int(edge[0])]).append(int(edge[1]))
         (cp_graph[int(edge[1])]).append(int(edge[0]))
         node_incoming[int(edge[1])] = float(edge[2])
     return cp_graph, pc_graph, node_incoming
+
 
 def calSpread(model, in_seeds):
     t_start = time.time()
@@ -174,22 +152,24 @@ if __name__ == '__main__':
    parser.add_argument('-k', '--k', type=int)
    parser.add_argument('-m', '--model', type=str, default='IC')
    parser.add_argument('-t', '--time', type=int, default=60)
+
+   # Global parameters
    args = parser.parse_args()
    input_file = args.input_file
    size = args.k
    model = args.model
-
-   #global time_budget
    time_budget = args.time
-   #print(seeds)
+
+   # Generate graph and incoming degree table using dictionary
    graph_cp, graph_pc, incoming = genGraph(input_file)
-   #print(input_file, seed_file, model, time_budget)
+   
+   # Generate seeds set using different algorithm
    seeds = genSeeds(size)
    seeds = hill_greedy(size, model)
    for seed in seeds:
        print(seed)
+
    #spread = calSpread(model) 
    #spread = IC(graph_pc, seeds, incoming)
    #spread = LT(graph_cp, seeds, incoming)
    #print(spread)
-   #print(graph_cp)
