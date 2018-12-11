@@ -66,29 +66,31 @@ def calSpread(model):
         t_cost = time.time() - t_start
         t_limit = time_budget - 10*t_cost
         while (time.time() - t_start) < t_limit:
-            print(t_limit, time.time() - t_start, spread)
+            #print(t_limit, time.time() - t_start, spread)
             spread = (IC(graph, seeds, incoming) + spread)/2
             #spread = IC(graph, seeds, incoming)
     return spread
 
 # Use Linear Threshold Model
 def LT(graph, seeds, node_incoming):
-    isActivated = np.zeros(node_num) > 0
+    isActivated = np.zeros([node_num, 1]) > 0
     saturation = 0
     for seed in seeds: # use seeds activate all seed's nodes
-        isActivated[seed-1] = 1
+        isActivated[seed-1][0] = 1
     # generate threshold
-    threshold = np.random.rand(node_num) 
+    threshold = np.random.rand(node_num,1) 
     #print(node_incoming)
     while(not saturation ): # Todo: add time limit later
-        newActivated=(np.dot(graph*node_incoming,1-isActivated)) > threshold
-        #print(sum(newActivated))
+        #print("1", (node_incoming*isActivated).shape)
+        #print("2", ((1-isActivated)*graph).shape)
+        newActivated=(np.dot((1-isActivated)*graph,(node_incoming*isActivated)))>threshold
+        #print(newActivated.shape)
         if sum(newActivated)==False : #node_num==sum(isActivated):
             saturation = 1
         else:
             isActivated = isActivated + newActivated 
         #print(isActivated)
-    return sum(isActivated==True)
+    return sum(isActivated)
 
 
 ## Using IC Model: the random value larget than incoming
@@ -138,6 +140,7 @@ if __name__ == '__main__':
 
    spread = calSpread(model) 
    #spread = IC(graph, seeds, incoming)
+   #spread = LT(graph, seeds, incoming)
    print(int(spread))
 
 

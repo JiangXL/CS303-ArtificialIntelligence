@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdftex 2018.12.10)  11 DEC 2018 01:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdftex 2018.12.10)  11 DEC 2018 14:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -8,9 +8,209 @@ entering extended mode
 l.1 \documentclass
                   [conference,compsoc]{IEEEtran}
 ? 
-! Emergency stop.
-l.1 \documentclass
-                  [conference,compsoc]{IEEEtran}
-End of file on the terminal!
+! Undefined control sequence.
+l.5 \ifCLASSOPTIONcompsoc
+                         
+? 
+! Undefined control sequence.
+l.8   \usepackage
+                 [nocompress]{cite}
+? 
+! Extra \else.
+l.9 \else
+         
+? 
+! Undefined control sequence.
+l.11   \usepackage
+                  {cite}
+? 
+! Extra \fi.
+l.12 \fi
+        
+? 
+! Undefined control sequence.
+l.15 \usepackage
+                {amsmath}
+? 
+! Undefined control sequence.
+l.16 \usepackage
+                {algorithm, algorithmic}
+? 
+! Undefined control sequence.
+l.17 \renewcommand
+                  {\algorithmicrequire}{\textbf{Input:}}
+? 
+! Undefined control sequence.
+l.17 \renewcommand{\algorithmicrequire
+                                      }{\textbf{Input:}}
+? 
+! Undefined control sequence.
+l.17 \renewcommand{\algorithmicrequire}{\textbf
+                                               {Input:}}
+? 
+! Undefined control sequence.
+l.18 \renewcommand
+                  {\algorithmicensure}{\textbf{Output:}}
+? 
+! Undefined control sequence.
+l.18 \renewcommand{\algorithmicensure
+                                     }{\textbf{Output:}}
+? 
+! Undefined control sequence.
+l.18 \renewcommand{\algorithmicensure}{\textbf
+                                              {Output:}}
+? 
+! Undefined control sequence.
+l.19 \usepackage
+                {array}
+? 
+! Undefined control sequence.
+l.20 \usepackage
+                {url}
+? 
+! Undefined control sequence.
+l.25 \begin
+           {document}
+? 
+! Undefined control sequence.
+l.26 \title
+           {Project 2: Capacitated Arc Routing Problems }
+? 
+! Undefined control sequence.
+l.31 \author
+            {\IEEEauthorblockN{Yuejian Mo  11510511}
+? 
+! Undefined control sequence.
+l.31 \author{\IEEEauthorblockN
+                              {Yuejian Mo  11510511}
+? 
+! Undefined control sequence.
+l.32 \IEEEauthorblockA
+                      {Department of Biology\\
+? 
+! Argument of \\ has an extra }.
+<inserted text> 
+                \par 
+<to be read again> 
+                   }
+l.34 Email: 11510511@mail.sustc.edu.cn}
+                                       }
+? 
+Runaway argument?
+ Southern University of Science and Technology\\ Email: 11510511@mail\ETC.
+! Paragraph ended before \\ was complete.
+<to be read again> 
+                   \par 
+<to be read again> 
+                   }
+l.34 Email: 11510511@mail.sustc.edu.cn}
+                                       }
+? 
+! Undefined control sequence.
+l.37 \maketitle
+               
+? 
+! Undefined control sequence.
+l.39 \IEEEpeerreviewmaketitle
+                             
+? 
+! Undefined control sequence.
+l.41 \section
+             {Preliminaries}
+? 
+! Undefined control sequence.
+l.45 waste collection, post delivery. \cite
+                                           {1} In the case of waste collecti...
 
-!  ==> Fatal error occurred, no output PDF file produced!
+? 
+! Undefined control sequence.
+l.56 satisfying\cite
+                    {1}:
+? 
+! Undefined control sequence.
+l.68 \subsection
+                {Software}
+? 
+! Undefined control sequence.
+l.72 \subsection
+                {Algorithm}
+? 
+! Undefined control sequence.
+l.82 \section
+             {Methodology}
+? 
+! Undefined control sequence.
+l.90 \subsection
+                {Representation}
+? 
+! Undefined control sequence.
+l.91 ... data are maintain during process: \textbf
+                                                  {capacity},\textbf{graph\_dm}
+
+? 
+! Undefined control sequence.
+l.91 ... during process: \textbf{capacity},\textbf
+                                                  {graph\_dm}
+? 
+! Undefined control sequence.
+l.92 , \textbf
+              {graph\_ct}.
+? 
+! Undefined control sequence.
+l.95 \begin
+           {itemize}
+? 
+! Undefined control sequence.
+<argument> \textbf 
+                   \enspace 
+\llap #1->\hbox to\z@ {\hss #1
+                              }
+\textindent #1->\indent \llap {#1\enspace }
+                                           \ignorespaces 
+l.96   \item \textbf
+                    {capacity}: The car's capacity, generated from input file.
+? 
+! Undefined control sequence.
+<argument> \textbf 
+                   \enspace 
+\llap #1->\hbox to\z@ {\hss #1
+                              }
+\textindent #1->\indent \llap {#1\enspace }
+                                           \ignorespaces 
+l.97   \item \textbf
+                    {graph\_dm}: The graph of edge with demand and their dem...
+
+? 
+! Undefined control sequence.
+<argument> \textbf 
+                   \enspace 
+\llap #1->\hbox to\z@ {\hss #1
+                              }
+\textindent #1->\indent \llap {#1\enspace }
+                                           \ignorespaces 
+l.99   \item \textbf
+                    {graph\_ct}: The graph of edge with cost and their cost,
+? 
+! Undefined control sequence.
+<argument> \textbf 
+                   \enspace 
+\llap #1->\hbox to\z@ {\hss #1
+                              }
+\textindent #1->\indent \llap {#1\enspace }
+                                           \ignorespaces 
+l.101   \item \textbf
+                     {shortest\_dist}: A dictionary of shortest distance and...
+
+? 
+[1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}] )</usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on CARP_11510511.pdf (1 page, 50009 bytes).
+PDF statistics:
+ 24 PDF objects out of 1000 (max. 8388607)
+ 16 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
