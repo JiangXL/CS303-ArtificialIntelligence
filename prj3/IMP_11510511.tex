@@ -10,84 +10,328 @@
   % normal IEEE
   \usepackage{cite}
 \fi
+
+
 \usepackage{amsmath}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage{algorithm, algorithmic}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \usepackage{array}
 \usepackage{url}
+% correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 
 \begin{document}
-\title{Project3: IMP}
+\title{Project 3: Influence Maximizing Problem }
 
-\author{\IEEEauthorblockN{Yuejian MO  11510511}
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Yuejian Mo  11510511}
 \IEEEauthorblockA{Department of Biology\\
-Southern Unviersity of Science and Technology\\
+Southern University of Science and Technology\\
 Email: 11510511@mail.sustc.edu.cn}}
+
 % make the title area
 \maketitle
 
 \IEEEpeerreviewmaketitle
 
-
 \section{Preliminaries}
+This project is an implementations of Greedy algorithm to find out a seed set
+to maximize the spread of influence through a social network, based on LT(Linear
+Threshold) and IC(Independent Cascade) models. With the development of Internet
+and smart phone, more and more people are connected by social network. It is
+interesting to study the influence spread between different members. Ecplicaty,
+maximizing the spread in network with less afford takes the eyes of adversity
+provider and government managers. In 2003, Kempe, Kleinberg and Tardos proposal
+two models to represent and optimize this kind of problem.\cite{1}
 
-The conceptually simplest model of this type is what one could call the
-$Independent Cascade Model$, investigated recently in the context of
-marketing by reports. We again start with an initial set of active nodes
-$A_0$, and the process unfolds in discrete steps according to the
-following randomized rule. When node $v$ first becomes active in step $t$
-,it is given a single chance to activate each currently inactive
-neighbor $w$; it succeeds with a probability $p_{v,w}$, a parameter of
-the system, independently of the history thus far. (If $w$ has multiple
-newly activated neighbors, their attempts are sequenced in an arbitray 
-order.) If $v$ succeeds, then $w$ will become active in step $t+1$; but
-whether or not $v$ succeeds, then it cannnot make any further attempts
-to activate $w$ in subsequent rounds. Again, the process runs until no
-more activations are possible.
+This problem, Influence Maximizing Problem(IMP) is a NP-hard. Inspired by
+above report, I success produce seed set by natural greedy.
+
+% Add figure here
 
 \subsection{Software}
-
+This project is written by Python 3.7 with editor Atom and Vim. Numpy, os, time,
+random, sys and argparse library are used.
 
 \subsection{Algorithm}
-   
+Using LT and IC model to evaluate the spread influence of seed sets and natural
+greedy algorithm to search optimal seeds set.
 
 
 \section{Methodology}
+Firstly, a social network is modeled as a directed graph $G=(V,E)$ and each
+edge $(u,v)\in E$ is associated with a weight $w(u,w)=\frac{1}{d_{in}}$ which
+indicates the probability that $u$ influences $v$. $S\in V$ is the subset of
+nodes selected to initiate the influence diffusion,  which is called seeds set.
+
+Then, I try to evaluate the spread influence with two different diffusion
+models. In \textit{Linear Threshold} model, a node $v$ is influenced by each
+neighbor $u$ according to a weight $w_{v,u}$ such that $\sum_{u}{w_{v,u}}
+<=1$. The dynamics is following. Each node $v$ are accessed a threshold $\theta\in
+[0,1]$ randomly obeyed uniform distribution at first step; this represents
+the weighted fraction of $v$' neighbors that must become active in order
+for $v$ become active. In step $t$, each inactive node $v$ will be active
+by its active neighbors $w$ at step $t-1$ as following
+$$\sum_{w}{w_{u,v}} >= \theta_v$$. Once no new active node is generated,
+maximal spread influence will obtain with given seeds set in specified graph.
+I notices final influence as the total number of active node $\sigma$.
+
+In \textit{Independent Cascade} model, I start with an initial set of active
+nodes $S$, and the process unfolds in discrete steps according to the following
+randomized rule. When node $v$ first becomes active in step $t$, it is given
+a single chance to activate each currently inactive neighbor $w$; it succeeds
+with a probability $w_{v,w}$, independently of the history thus far. Every
+step. In practical, for each inactive neighbor $w$ of new active node $v$ will
+be active, if $w_{v,w}$ is larger than a new generated random number between 0 and
+1 obeyed uniform distribution. (If $w$ has multiple newly activated neighbors,
+their attempts are sequenced in an arbitrary order.) If $v$ succeeds, then it
+cannot make any further attempts to activate $w$ in subsequent rounds. Again,
+the process runs until no more activation are possible.
+
+Both of Linear Threshold and independent Cascade model are stimulated by
+repeating many time to average influence for each seed.
+
+Finally, the seed required for IMP is generated by a natural greedy algorithm.
+Each time, a node with highest influence will added to a seeds set. This empty
+seed set will fill with $k$ node, where $k$ is given from outside.
 
 \subsection{Representation}
+Some main data are maintain during process: \textbf{time\_budget},
+\textbf{node\_num}, \textbf{graph\_cp}, \textbf{graph\_pc}, \textbf{incoming}.
+Others data would be specified inside functions.
 
+\begin{itemize}
+  \item \textbf{time\_budget}: How many second (in Wall clock) spend on instance,
+	  which provided from OJ system.
+  \item \textbf{node\_num}: The total node number of given graph.
+  \item \textbf{graph\_cp}: The adjacent list of network graph using dictionary,
+	  where a node point to all precursors, which is generated from input file.
+  \item \textbf{graph\_pc}: The adjacent list of network graph using dictionary,
+	  where a node point to all descendants, which is generated from input
+		file.
+  \item \textbf{incoming}: A dictionary stores the incoming weight $w_{v,u}$,
+	  indexed by node $u$.
+\end{itemize}
 
 
 \subsection{Architecture}
+Here list all functions of \textbf{ISE.py} in given code:
+\begin{itemize}
+    \item \textbf{genSeeds}: Read seeds and store in a list from input file.
+    \item \textbf{genGraph}: Generate $graph\_cp$ and $graph\_pc$ from input file.
+    \item \textbf{LT}: Calculate influence of linear threshold model of given seeds
+	    set.
+    \item \textbf{IC}: Calculate influence of independent cascade model of given
+	    seeds set.
+    \item \textbf{calSpread}: Calculate influence by repeating many time of $LT$
+	    or $IC$ function.
+    \item \textbf{s\_format}: Standard output function. 
+    \item \textbf{\_\_main\_\_}: Main control function. 
+\end{itemize}
+The \textbf{IMP.py} is similar to \textbf{ISE.py}, but one function is added:
+\begin{itemize}
+    \item \textbf{hill\_greedy}: Find out optimal seeds set using Hill-Greedy
+	    algorithm.
+\end{itemize}
 
+The \textbf{ISE.py} and \textbf{IMP.py} were executed in OJ system and local
+system.
 
 \subsection{Detail of Algorithm}
+Here describes some vital functions.
+\begin{itemize}
+    \item \textbf{genGraph}: Generate global cost and demand graph from
+    input file.
+    \begin{algorithm}[H]
+     \caption{genGraph}
+     \begin{algorithmic}[1]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $input\_file\_name$
+     \ENSURE $graph\_cp, graph\_pc, incoming$
+     \STATE open $input\_file\_name$ as $file$ \COMMENT{open file and read line
+     by line}
+     \STATE $node\_num$, $edge\_num$ $\leftarrow$ first line of $file$
+     \STATE \COMMENT{Read each line information until arrive edge information}
+     \FOR {each line in $file$}
+       \STATE $precursor$,$descendant$,$weight$ $\leftarrow$ split each line
+          \STATE $graph\_cp[precursor] = descendant$
+	  \STATE $graph\_pc[descendant] = precursor$
+	  \STATE $incoming[descendant] = weight$
+     \ENDFOR
+     \end{algorithmic}
+   \end{algorithm}
+
+   \item \textbf{LT}: Calculate the influence of seeds set of Linear Threshold
+	   model.
+     \begin{algorithm}[H]
+     \caption{LT}
+     \begin{algorithmic}[2]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $graph\_pc, S, incoming$
+     \ENSURE  length of $isActive$
+     \STATE copy $S$ to new list $isActive$
+     \STATE create empty list $threshold$
+     \FOR { each node in graph}
+	\STATE Add Random Number $\alpha$ between [0,1] to $threshold$
+	\IF {$\alpha == 0$}
+	     \STATE add this node to $isActive$
+	\ENDIF
+     \ENDFOR
+     \STATE $saturation \leftarrow 0$ 
+     \STATE $lastlen \leftarrow $ length of $isActive$ 
+     \WHILE{ NOT $saturation$ }
+	\STATE $pulse \leftarrow 0$
+        \FOR {each inactive node $v$ \AND $s$'s precursor is active}
+	     \STATE $pulse \leftarrow incoming[v]$
+        \ENDFOR
+	\IF {$pulse \le threshold[v]$}
+            \STATE add node $v$ to $isActive$
+	\ENDIF
+	\IF {$lastlen ==$ length of $isActive$}
+	     \STATE $saturation \leftarrow 1$ 
+	\ENDIF
+	\STATE $lastlen \leftarrow$ length of $isActive$
+     \ENDWHILE
+     \RETURN length of $isActive$
+     \end{algorithmic}
+     \end{algorithm}
+
+  \item \textbf{IC}: Calculate influence of seeds set of Independent
+	 Cascade model.
+    \begin{algorithm}[H]
+     \caption{IC}
+     \begin{algorithmic}[3]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $graph\_cp, S, incoming$
+     \ENSURE  length of $isActive$
+     \STATE copy $S$ to $isActive$ and $lastActive$ 
+     \STATE $balance \leftarrow 0$
+     \WHILE { NOT $balance$}
+	\STATE create empty list $newActive$
+	     \FOR{each active node $v$'s inactive neighbor $w$}
+		\IF{ $incoming[w] \le$ RANDOM NUMBER $alpha$ }
+		    \STATE add $w$ to $newActive$
+		    \STATE add $w$ to $isActive$
+		\ENDIF
+	     \ENDFOR
+            \IF{length of $newActive$ == 0 OR  length of $isActive$ == $node\_num$}
+	     \STATE $balance \leftarrow  1 $
+	     \ENDIF
+     \ENDWHILE
+     \RETURN length of $isActive$
+     \end{algorithmic}
+     \end{algorithm}
+ 
+ \item \textbf{hill\_greedy}: Generate optimal seed using Hill Greedy Algorithm
+     \begin{algorithm}[H]
+     \caption{hill\_greedy}
+     \begin{algorithmic}[4]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $size, model$
+     \ENSURE  $seeds$
+     \STATE create empty $ans\_seeds$
+     \STATE $cnt \leftarrow 0$
+     \WHILE{$cnt \ne size$}
+	\STATE copy $ans\_seeds$ to $cur\_seed$
+	\STATE $high \leftarrow 0$
+	\STATE $point \leftarrow 1$
+        \FOR{each node $4$ don't be chosen}
+	     \STATE add $v$ to $cur\_seed$
+	     \IF{$model$ == IC}
+	          \STATE $new\_high \leftarrow IC(graph\_pc,cur\_speed, incoming)$ 
+	     \ELSE
+	          \STATE $new\_high \leftarrow LT(graph\_cp,cur\_speed, incoming)$ 
+	     \ENDIF
+	     \IF{$nw\_high \le high$}
+	         \STATE $high \leftarrow new\_high$
+		 \STATE $point \leftarrow v$
+	     \ENDIF
+        \ENDFOR
+	\STATE add $point$ to $ans\_seeds$
+	\STATE $cnt \leftarrow cnt+1$
+     \ENDWHILE
+     \RETURN $ans\_seeds$
+     \end{algorithmic}
+     \end{algorithm}
+ 
+
+\end{itemize}
 
 
 \section{Empirical Verification}
-
+Empirical verification is confirmed in OJ system. $ISE.py$ almost pass all
+dataset with reasonable bias. $IMP.py$ only was test with network-5-IC and
+provide reasonable seeds set.
 
 \subsection{Design}
+Independent cascade model return reasonable influence is small graph and big graph.
+But Linear Threshold model return less reasonable due with large graph. Finally,
+I found my code would added some element repeatedly result in larger bias.
+
+For hill greedy, because I just evaluate once, it produce seeds set fast. In
+small graph, which produce seeds in 65 percent effect. But
+Not optimal seeds are produced every time.
 
 \subsection{Data and data structure}
+Dictionaries and lists are used widely rather than matrix. Because the input graph
+is sparse, dictionary are always used to store graph as adjacent list. Global
+variable $graph\_pc$, $graph\_cp$ and $incoming$ are dictionary. Lists always
+store routes and edges information for local variable.
 
 \subsection{Performance}
+Following table show different performance with different dataset. Offline
+test perform at Fedora 29 with $Intel^{®}$ Xeon(R) CPU E5-1680 v3@3.20GHz and
+32GiB memory.
+
+\begin{center}
+   \begin{tabular}{| l | l | l |}
+   \hline
+    Dataset             &Run Time(s)   &Result   \\ \hline
+    network-seeds-IC     & 23.23        & 5.015  \\
+    network-seeds-LT     & 23.23        & 5.015  \\
+    network-seeds2-IC    & 23.24        & 30.47  \\ 
+    network-seeds2-LT    & 57.79        & 37.03  \\
+    NetHEPT-5seeds-LT    & 58.55        & 341.9  \\
+    NetHEPT-5seeds-IC    & 27.87        & 276.3  \\
+    NetHEPT-50seeds-LT    &         &   \\
+    NetHEPT-50seeds-IC    & 27.87        & 1003  \\
+    network-5-IC         & 0.73         & 19.45  \\
+   \hline
+   \end{tabular}
+\end{center}
 
 \subsection{Result}
+Solutions are accepted most all public dataset' test. But Linear Threshold model
+produce influence with large bias. 
 
 \subsection{Analysis}
-
-
+Because natural Hill Greedy is kind of greedy algorithm without heuristics, most
+of solutions are not optimal. During using adjacent list rather than adjacent
+matrix, space cost is more lower than $O(n^2)$. Because every point only is
+evaluate once, only less time it cost. Total, no more than $O(n^2)$ is required.
 
 \section*{Acknowledgment}
+Thanks TA Yao Zhao who explain question and provide general method to solve it.
+And I also thanks for Kebing Sun discuss and share the idea about algorithm.
 
 \bibliographystyle{IEEEtran}
-
 \begin{thebibliography}{1}
-\bibitem{reference} XXXXXXX
+\bibitem{1}
+Kempe D, Kleinberg J, Tardos É. Maximizing the spread of influence through a
+social network[C]//Proceedings of the ninth ACM SIGKDD international conference
+on Knowledge discovery and data mining. ACM, 2003: 137-146.
+
 \end{thebibliography}
+
+% that's all folks
+\end{document}
+
 

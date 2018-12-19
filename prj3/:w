@@ -1,0 +1,342 @@
+\documentclass[conference,compsoc]{IEEEtran}
+
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+
+
+\usepackage{amsmath}
+\usepackage{algorithm, algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\usepackage{array}
+\usepackage{url}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+\title{Project 3: Influence Maximizing Problem }
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Yuejian Mo  11510511}
+\IEEEauthorblockA{Department of Biology\\
+Southern University of Science and Technology\\
+Email: 11510511@mail.sustc.edu.cn}}
+
+% make the title area
+\maketitle
+
+\IEEEpeerreviewmaketitle
+
+\section{Preliminaries}
+This project is an implementations of Greedy algorithm to find out a seed set
+to maximize the spread of influence through a social network, based on LT(Linear
+Threshold) and IC(Independent Cascade) models. With the development of Internet
+and smart phone, more and more people are connected by social network. It is
+interesting to study the influence spread between different members. Ecplicaty,
+maximizing the spread in network with less afford takes the eyes of adversity
+provider and government managers. In 2003, Kempe, Kleinberg and Tardos proposal
+two models to represent and optimize this kind of problem.\cite{1}
+
+This problem, Influence Maximizing Problem(IMP) is a NP-hard. Inspired by
+above report, I success produce seed set by natural greedy.
+
+% Add figure here
+
+\subsection{Software}
+This project is written by Python 3.7 with editor Atom and Vim. Numpy, os, time,
+random, sys and argparse library are used.
+
+\subsection{Algorithm}
+Using LT and IC model to evaluate the spread influence of seed sets and natural
+greedy algorithm to search optimal seeds set.
+
+function to generate cost graph and demand graph between vertex and vertex
+from provided txt file, two functions to generate shortest distance and pathway
+dictionary by Dijkstra algorithm, other are control flow and output format
+function. Function $Better$ break the balanced status.
+
+
+
+\section{Methodology}
+Firstly, a social network is modeled as a directed graph $G=(V,E)$ and each
+edge $(u,v)\in E$ is associated with a weight $w(u,w)\in[0,1]$ which indicates
+the probability that $u$ influences $v$. $S\in V$ is the subset of nodes
+selected to initiate the influence diffusion,  which is called seeds set.
+
+
+Then, I try to evaluate the spread influence with two different diffusion
+models. In Linear Threshold Model, a node $v$ is influenced by each neighbor
+$u$ according to a $weiht w_{v,u}$
+
+
+CARP is NP-hard. Path-Scanning provide a reasonable heuristic method to reduce
+the total cost. Firstly, edge with required was copy to a new list. Car begin
+its service from depot(vertex 1). Then the shortest pathway away from now
+service vertex will be choose as new service vertex while the car is not full
+and here still are required edges. Repeat above produce to clean up all required
+edges.
+
+The conceptually simplest model of this type is what one could call the
+$Independent Cascade Model$, investigated recently in the context of marketing
+by reports. We again start with an initial set of active nodes $A_0$, and the
+process unfolds in discrete steps according to the following randomized rule.
+When node $v$ first becomes active in step $t$, it is given a single chance to
+activate each currently inactive neighbor $w$; it succeeds with a probability
+$p_{v,w}$, a parameter of the system, independently of the history thus far.
+(If $w$ has multiple newly activated neighbors, their attempts are sequenced
+in an arbitrary order.) If $v$ succeeds, then it cannot make any further
+attempts to activate $w$ in subsequent rounds. Again, the process runs until
+no more activation are possible.
+
+\subsection{Representation}
+Some main data are maintain during process: \textbf{capacity},\textbf{graph\_dm}
+, \textbf{graph\_ct}.
+Others data would be specified inside functions, shortest\_dist should noticed.
+
+\begin{itemize}
+  \item \textbf{capacity}: The car's capacity, generated from input file.
+  \item \textbf{graph\_dm}: The graph of edge with demand and their demand,
+  generated from input file.
+  \item \textbf{graph\_ct}: The graph of edge with cost and their cost,
+  generated from input file.
+  \item \textbf{shortest\_dist}: A dictionary of shortest distance and pathway
+  between two vertexes. 
+\end{itemize}
+
+
+\subsection{Architecture}
+Here list all functions in given code:
+\begin{itemize}
+    \item \textbf{generateGraph}: Generate cost and demand graph from input file.
+    \item \textbf{dijkstra}: Calculate all vertexes closest distance and
+    pathway away from specify source.
+    \item \textbf{genDijkstraDist}: Generate each two vertexes closest distance
+    and pathway from \textbf{dijkstra} function.
+    \item \textbf{better}: Second rule to choose one vertexes from two vertex. 
+    \item \textbf{pathScan}: Path-Scanning algorithm to generate serve sequence. 
+    \item \textbf{s\_format}: Standard output function. 
+    \item \textbf{\_\_name\_\_}: Main control function. 
+\end{itemize}
+The CARP\_solver would be executed in test platform.
+
+
+\subsection{Detail of Algorithm}
+Here describes some vital functions.
+\begin{itemize}
+    \item \textbf{generateGraph}: Generate global cost and demand graph from
+    input file.
+    \begin{algorithm}[H]
+     \caption{generateGraph}
+     \begin{algorithmic}[1]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $input\_file\_name$
+     \ENSURE $ $
+     \STATE open $input\_file\_name$ as $file$ \COMMENT{open file and read line
+     by line}
+     \STATE $capacity \leftarrow $file$.readline$
+     \STATE \COMMENT{Read each line information until arrive edge information}
+     \FOR {each edge $e$}
+       \STATE split each line string into an array $line$ with 4 elements.
+       \IF{ ($line[3]$ larger than 0)} 
+          \STATE $graph\_dm$[($line$[0], $line$[1])]= $line$[3]
+          \STATE $graph\_dm[(line[1], line[0])]= line[3]$
+          \COMMENT {Only add edge to dictionary $graph\_dm$when edge has
+          demand. Both of two direction will be created.}
+       \ENDIF
+       \STATE $graph\_ct[(line[0], line[1])]= line[2]$
+       \STATE $graph\_ct[(line[1], line[0])]= line[2]$
+     \ENDFOR
+     \end{algorithmic}
+   \end{algorithm}
+
+   \item \textbf{dijkstra}: generate closest distance and pathway away from source
+     \begin{algorithm}[H]
+     \caption{dijkstra}
+     \begin{algorithmic}[2]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $source$
+     \ENSURE  $dist$, $prev$
+     \STATE create vertex set $Q$
+     \STATE create distance set $dist$
+     \STATE create path set $prev$
+     \FOR { each vertex $v$ in $graph\_ct$ }
+        \STATE $dist[v] \leftarrow INFINITY$
+        \STATE $prev[v] \leftarrow UNDEFINED$
+        \STATE add $v$ to $Q$
+     \ENDFOR
+     \STATE $dist[source] \leftarrow$ 0
+     \WHILE{($Q$ is not empty)}
+        \STATE $u$ $\leftarrow$ vertex in $Q$ with min $dist[u]$
+        \STATE remove $u$ from $Q$
+        \FOR {for each neighbor $v$ in $u$}
+           \STATE $alt \leftarrow dist[u] + graph\_ct(u,v)$
+           \IF {alt larger than $dist[u]$}
+              \STATE $dist[v] \leftarrow alt$
+              \STATE $prev[v] \leftarrow u$
+           \ENDIF
+        \ENDFOR
+     \ENDWHILE
+     \RETURN $dist$, $prev$
+     \end{algorithmic}
+     \end{algorithm}
+
+  \item \textbf{genDijstraDist}: generate closest distance and pathway between
+  two vertex into a dictionary $shortestDist$
+    \begin{algorithm}[H]
+     \caption{genDijstraDist}
+     \begin{algorithmic}[3]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $ $
+     \ENSURE  $shortestDist$
+     \STATE create dictionary $shortestDist$
+     \FOR {each edge's first vertex in $graph\_dm$ as $source$ }
+       \STATE $dist$, $prev$ $\leftarrow$ dijkstra($source$) 
+       \FOR {each edge's first vertex in $graph\_dm$ as $target$ }
+         \STATE $shortestDist[source, target] \leftarrow dist$
+       \ENDFOR
+     \ENDFOR
+     \RETURN $shortestDist$
+     \end{algorithmic}
+     \end{algorithm}
+ 
+ \item \textbf{better}: choose better in pointers 
+     \begin{algorithm}[H]
+     \caption{better}
+     \begin{algorithmic}[4]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $now$, $pre$
+     \ENSURE  $Ture$ or $False$
+     \RETURN $graph\_dm[now] < graph\_dm[pre]$
+     \end{algorithmic}
+     \end{algorithm}
+ 
+
+   \item \textbf{pathScan}: Path Scanning algorithm to determine serve routes
+     \begin{algorithm}[H]
+     \caption{pathScan}
+     \begin{algorithmic}[4]
+     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+     \renewcommand{\algorithmicensure}{\textbf{Output:}}
+     \REQUIRE $shortest\_dist$
+     \ENSURE  $R$, $cost$
+     \STATE create successive routes $R$
+     \STATE copy required edge from $graph\_dm$ to $free$ 
+     \STATE $k, cost \leftarrow 0$
+     \WHILE { $free$ is not empty}
+       \STATE $k \leftarrow k+1$
+       \STATE $cost\_k, load\_k \leftarrow 0 $
+       \STATE rest successive routes $R\_k$ each time 
+       \STATE serve from origin vertex: $source \leftarrow 1$
+       \WHILE { $free$ in not empty}
+         \STATE rest shortest distance: $d \leftarrow \infty$ 
+         \STATE rest candidate serve edge: $e\_candidate \leftarrow -1$
+         \FOR {each edge $e$ in $free$}
+            \IF {$load\_k + graph\_dm[e] \le capacity$}
+               \STATE $dist\_now \leftarrow shortest\_dist[source, e.start]$
+               \IF {$dist\_now \le d$}
+                 \STATE $d \leftarrow dist\_now$
+                 \STATE $e\_candidate \leftarrow e$
+               \ELSIF {$dist\_now = d$ $\cap$ better($e$,$e\_candidate$ )}
+                 \STATE $e\_candidate \leftarrow e$
+               \ENDIF
+            \ENDIF
+         \ENDFOR
+         \IF {$e = \infty$}
+            \STATE BREAK
+         \ENDIF
+         \STATE add $e\_candidate$ to $R\_k$
+         \STATE $load\_k = load\_k + graph\_dm[e\_candidate]$
+         \STATE $cost\_k = cost\_k + graph\_ct[e\_candidate]$
+         \STATE $i = e\_candidate.end$
+         \STATE remove $e\_candidate$ and its opposite edge from free
+       \ENDWHILE
+       \STATE add back home distance: $cost\_k = cost\_k + shortest\_dist[i,1]$
+       \STATE add $R\_k$ to $R$
+       \STATE $cost = cost + cost\_k$
+     \ENDWHILE
+     \RETURN $R$, $cost$
+     \end{algorithmic}
+     \end{algorithm}
+
+
+\end{itemize}
+
+
+\section{Empirical Verification}
+Empirical verification is confirmed in public test platform. Both right output
+format and reasonable routes are produced.
+
+\subsection{Design}
+Dijkstra's algorithm return successfully shortest distance and pathway between
+two vertex. Path-Scanning run correctly. However, Path-Scanning don't provide
+most optimal routes in spite of the size of test data. Function $better$
+
+\subsection{Data and data structure}
+Dictionaries and lists are used widely rather than matrix. Because the input graph
+is sparse, dictionary are always used to store graph. Global variable
+$graph\_dm$ and $graph\_ct$ are dictionary. Lists always store routes and edges
+information.
+
+\subsection{Performance}
+Following table show different performance with different dataset.
+
+\begin{center}
+   \begin{tabular}{| l | l | l |}
+   \hline
+    Dataset  & Run Time(s) & Cost \\ \hline
+    gdb1     & 0.65        & 370  \\ 
+    gdb10    & 0.63        & 309  \\
+    val1A    & 0.68        & 212  \\
+    val4A    & 0.92        & 450  \\
+    val7A    & 4           & 334  \\
+    egl-e1-A & 0.96        & 4201 \\
+    egl-s1-A & 5.02        & 6383 \\
+   \hline
+   \end{tabular}
+\end{center}
+
+\subsection{Result}
+Solutions are accepted for all data set test. Larger data set require more time.
+
+\subsection{Analysis}
+Because Path-Scanning is kind of greedy algorithm with heuristics, most of
+solutions are not optimal. The space cost is close to $O(n)$. First time cost
+$O(n^2)$ is in building Dijkstra's distance, which only run once. Path-Scanning
+without function $Better$ just cost $O(n)$. Total cost time most vary on 
+function $Better$. For example, if $Better$ just return random result, it will
+cost less time than comparison method. Although complex and well-design $Better$
+cost more time, it's solution is less-cost-routes.
+
+\section*{Acknowledgment}
+Thanks TA Yao Zhao who explain question and provide general method to solve it.
+And I also thanks for Kebing Sun discuss algorithm and point the output
+formation error.
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{1}
+\bibitem{1}
+Ke Tang, Yi Mei, and Xin Yao, “Memetic Algorithm With Extended Neighborhood
+Search for Capacitated Arc Routing Problems,” IEEE Transactions on Evolutionary
+Computation, vol. 13, no. 5, pp. 1151–1166, Oct. 2009.
+
+\end{thebibliography}
+
+% that's all folks
+\end{document}
+
+
