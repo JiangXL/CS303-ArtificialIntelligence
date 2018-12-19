@@ -7,13 +7,6 @@ Output: the value of the estimated influence spread
 
 | Version | Commit
 |   0.1   |   
-
-matrix:
-      in1 in2 ... inn
-out1 [              ]
-out2 [              ]
-.    [              ]
-outn [              ]
 '''
 import sys
 import os
@@ -101,7 +94,7 @@ def LT(cp_graph, seeds, node_incoming):
             isActivated.append(i+1)
     lastlen = len(isActivated)
     while (not saturation):
-        for node in cp_graph.keys():
+        for node in cp_graph.keys(): # Should be only near seed set
             if not(node in isActivated):  # For each node was inactivated do:
                 pulse = 0
                 for parent in cp_graph[node]:
