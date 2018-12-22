@@ -17,9 +17,9 @@ def init(train_txt, tie_limit):
              #data.append(line)
     x = np.array(data)
     y = (x[:, -1]).astype(int)
-    x[:, -1] = np.ones(len(data))
+    x[:, -1] = 1
     w = np.zeros(len(x[1,:]))
-    cycle = 10000
+    cycle = 1000
     return x, y, w, cycle
     
 def get_loss(xi, yi, w):
@@ -38,6 +38,7 @@ def cal_sgd(xi, yi, w, ratio, learn_speed):
 ## Training fucntion
 def train(x, y, w, cnt, learn_speed):
     # Repeat cnt time
+    log = open("learn_curve.log", "w")
     t = 0
     for epoch in range(cnt):
         randomize =  np.arange(len(x))
@@ -56,21 +57,25 @@ def train(x, y, w, cnt, learn_speed):
             loss += get_loss(xi, yi, w)
             w = cal_sgd(xi, yi, w, ratio, learn_speed)
        # print train result each time
-        print('epoch:{0} loss:{1}'.format(epoch, loss))
+       # print('epoch:{0} loss:{1}'.format(epoch, loss))
+        log.write("%d\n"%loss)
     return w
 
-def predict(x, w):
-    test_data = []
+def predict(test_txt, w):
+    data = []
     with open(test_txt) as test_data:
          for line in  test_data:
              data.append([float(l) for l in line.split()])
              #data.append(line)
-    x = np.array(data)
-    y = (x[:, -1]).astype(int)
-    x[:, -1] = np.ones(len(data))
-
-    x_test = np.c_[np.ones((s.shape[0])), x]
-    return np.sign(np.dot(x_test, w))
+    x_test = np.array(data)
+    y_test = (x_test[:, -1]).astype(int)
+    x_test[:, -1] = 1
+    result = np.sign(np.dot(x_test, w))
+    test_log = open("test_result.log", "w")
+    for each in result == y_test:
+        test_log.write("%d\n"% each)
+    #print("right predict:", sum(result == y_test), "in", len(result), sum(result==y_test)/len(result))
+    return result
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -87,7 +92,9 @@ if __name__ == '__main__':
     learn_speed = 0.2
     w = train(x, y, w, cycle, learn_speed)
 
-    #predict(x, w, test_data)
+    result = predict(test_data, w)
+    for each in result:
+        print(each)
 
     sys.stdout.flush()
     os._exit(0)

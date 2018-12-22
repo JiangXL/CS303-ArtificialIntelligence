@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+Using SVM to classify dataset
+| Version | Commit
+|   0.1   | Finish first version based on slide
 
-import multiprocessing as mp
+"""
+
 import time
 import sys
 import argparse
@@ -13,13 +18,15 @@ def init(train_txt, tie_limit):
     data = []
     with open(train_txt) as train_data:
          for line in  train_data:
+             #print(line)
              data.append([float(l) for l in line.split()])
              #data.append(line)
+             print(data[-1])
     x = np.array(data)
     y = (x[:, -1]).astype(int)
     x[:, -1] = 1
     w = np.zeros(len(x[1,:]))
-    cycle = 10000
+    cycle = 1000
     return x, y, w, cycle
     
 def get_loss(xi, yi, w):
