@@ -124,127 +124,88 @@ Some main data are maintain during process: \textbf{time\_budget},
 Others data would be specified inside functions.
 
 \begin{itemize}
-  \item \textbf{time\_budget}: How many second (in Wall clock) spend on instance,
-	  which provided from OJ system.
-  \item \textbf{node\_num}: The total node number of given graph.
-  \item \textbf{graph\_cp}: The adjacent list of network graph using dictionary,
-	  where a node point to all precursors, which is generated from input file.
-  \item \textbf{graph\_pc}: The adjacent list of network graph using dictionary,
-	  where a node point to all descendants, which is generated from input
-		file.
-  \item \textbf{incoming}: A dictionary stores the incoming weight $w_{v,u}$,
-	  indexed by node $u$.
+  \item \textbf{x}: Numpy matrix to store input data.
+  \item \textbf{y}: 1-d numpy matrix of label of input data.
+  \item \textbf{w}: 1-d numpy matrix of weight and bias of SVM parameters.
 \end{itemize}
 
 
 \subsection{Architecture}
-Here list all functions of \textbf{ISE.py} in given code:
+Here list main functions of \textbf{SVM.py} in given code:
 \begin{itemize}
-    \item \textbf{genSeeds}: Read seeds and store in a list from input file.
-    \item \textbf{genGraph}: Generate $graph\_cp$ and $graph\_pc$ from input file.
-    \item \textbf{LT}: Calculate influence of linear threshold model of given seeds
-	    set.
-    \item \textbf{IC}: Calculate influence of independent cascade model of given
-	    seeds set.
-    \item \textbf{calSpread}: Calculate influence by repeating many time of $LT$
-	    or $IC$ function.
-    \item \textbf{s\_format}: Standard output function. 
-    \item \textbf{\_\_main\_\_}: Main control function. 
-\end{itemize}
-The \textbf{IMP.py} is similar to \textbf{ISE.py}, but one function is added:
-\begin{itemize}
-    \item \textbf{hill\_greedy}: Find out optimal seeds set using Hill-Greedy
-	    algorithm.
+    \item \textbf{init}: load train data to $x$, $y$; load time limit; initialize
+	    parameter matrix $w$.
+    \item \textbf{cal\_sgd}: Update $w$ using gradient descent.
+    \item \textbf{train}: Train $w$ from train data data $x$, $y$.
+    \item \textbf{predict}: Predict label of test data
+    \item \textbf{\_\_main\_\_}: Main function
 \end{itemize}
 
-The \textbf{ISE.py} and \textbf{IMP.py} were executed in OJ system and local
-system.
+The \textbf{SVM.py} is executed locally.
 
 \subsection{Detail of Algorithm}
 Here describes some vital functions.
 \begin{itemize}
-    \item \textbf{genGraph}: Generate global cost and demand graph from
-    input file.
+    \item \textbf{init}: load train data and initial parameters
     \begin{algorithm}[H]
-     \caption{genGraph}
+     \caption{int}
      \begin{algorithmic}[1]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $input\_file\_name$
-     \ENSURE $graph\_cp, graph\_pc, incoming$
+     \REQUIRE $input\_file\_name, time\_limit$
+     \ENSURE $x, y, w, cycle$
      \STATE open $input\_file\_name$ as $file$ \COMMENT{open file and read line
      by line}
-     \STATE $node\_num$, $edge\_num$ $\leftarrow$ first line of $file$
      \STATE \COMMENT{Read each line information until arrive edge information}
+     \STATE set $data$
      \FOR {each line in $file$}
-       \STATE $precursor$,$descendant$,$weight$ $\leftarrow$ split each line
-          \STATE $graph\_cp[precursor] = descendant$
-	  \STATE $graph\_pc[descendant] = precursor$
-	  \STATE $incoming[descendant] = weight$
+          \STATE split line, then package and append line info to $data$
      \ENDFOR
+     \STATE transform set $data$ to matrix $x$
+     \STATE $y \leftarrow x[:,-1]$ 
+     \STATE $x[:, -1] \leftarrow 1$
+     \STATE initialize $w$ with length of $x[:, -1]$ and value of 0
+     \STATE $cycle$
+     \RETURN $x, y, w, cycle$
      \end{algorithmic}
    \end{algorithm}
 
-   \item \textbf{LT}: Calculate the influence of seeds set of Linear Threshold
-	   model.
+   \item \textbf{cal\_sgd}:Update $w$ using gradient descent
      \begin{algorithm}[H]
-     \caption{LT}
+     \caption{cal\_sgd}
      \begin{algorithmic}[2]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $graph\_pc, S, incoming$
-     \ENSURE  length of $isActive$
-     \STATE copy $S$ to new list $isActive$
-     \STATE create empty list $threshold$
-     \FOR { each node in graph}
-	\STATE Add Random Number $\alpha$ between [0,1] to $threshold$
-	\IF {$\alpha == 0$}
-	     \STATE add this node to $isActive$
-	\ENDIF
-     \ENDFOR
-     \STATE $saturation \leftarrow 0$ 
-     \STATE $lastlen \leftarrow $ length of $isActive$ 
-     \WHILE{ NOT $saturation$ }
-	\STATE $pulse \leftarrow 0$
-        \FOR {each inactive node $v$ \AND $s$'s precursor is active}
-	     \STATE $pulse \leftarrow incoming[v]$
-        \ENDFOR
-	\IF {$pulse \le threshold[v]$}
-            \STATE add node $v$ to $isActive$
-	\ENDIF
-	\IF {$lastlen ==$ length of $isActive$}
-	     \STATE $saturation \leftarrow 1$ 
-	\ENDIF
-	\STATE $lastlen \leftarrow$ length of $isActive$
-     \ENDWHILE
-     \RETURN length of $isActive$
+     \REQUIRE $xi, yi, w, ratio, learn\_speed$
+     \ENSURE $w\_next$ 
+     \IF {$yi*(\cdot{xi}{w}) < 1$}
+	     \STATE $w\_next = w - ratio*(learn\_speed*w - yi*xi)$
+     \ELSE
+	     \STATE $w\_next = w - ratio*learn\_speed*yi$
+     \ENDIF
+     \RETURN $w\_next$
      \end{algorithmic}
      \end{algorithm}
 
-  \item \textbf{IC}: Calculate influence of seeds set of Independent
-	 Cascade model.
+  \item \textbf{train}: Train $w$ with data $x, y$
     \begin{algorithm}[H]
-     \caption{IC}
+     \caption{train}
      \begin{algorithmic}[3]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $graph\_cp, S, incoming$
-     \ENSURE  length of $isActive$
-     \STATE copy $S$ to $isActive$ and $lastActive$ 
-     \STATE $balance \leftarrow 0$
-     \WHILE { NOT $balance$}
-	\STATE create empty list $newActive$
-	     \FOR{each active node $v$'s inactive neighbor $w$}
-		\IF{ $incoming[w] \le$ RANDOM NUMBER $alpha$ }
-		    \STATE add $w$ to $newActive$
-		    \STATE add $w$ to $isActive$
-		\ENDIF
+     \REQUIRE $x, y, w, cnt, learn\_speed$
+     \ENSURE  $w$
+     \STATE $t \leftarrow 0$
+     \WHILE{ running time don't exceed ordered time}
+	     \STATE reorder $x$ and $x$ in the same time
+	     \STATE $loss \leftarrow 0$ 
+	     \STATE $t \leftarrow t+1$
+	     \STATE $1//(t*learn\_speed)$
+	     \FOR{ each line $x_i$ and $y_i$ in training data}
+	          \STATE $w = cal\_sgd(x_i, y_i, w, ratio, learn\_speed$
 	     \ENDFOR
-            \IF{length of $newActive$ == 0 OR  length of $isActive$ == $node\_num$}
-	     \STATE $balance \leftarrow  1 $
-	     \ENDIF
      \ENDWHILE
-     \RETURN length of $isActive$
+     \RETURN $w$
      \end{algorithmic}
      \end{algorithm}
  
