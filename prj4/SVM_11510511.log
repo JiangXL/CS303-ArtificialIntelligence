@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  27 DEC 2018 09:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  30 DEC 2018 11:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -135,6 +135,16 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+\Gin@req@height=\dimen126
+\Gin@req@width=\dimen127
+)
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2017/09/02 v2.17a AMS math features
 \@mathmargin=\skip44
@@ -145,12 +155,12 @@ Package: amstext 2000/06/29 v2.01 AMS text
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks15
-\ex@=\dimen126
+\@emptytoks=\toks16
+\ex@=\dimen128
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen127
+\pmbraise@=\dimen129
 )
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
@@ -167,7 +177,7 @@ LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
 \Mathstrutbox@=\box28
 \strutbox@=\box29
-\big@size=\dimen128
+\big@size=\dimen130
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \macc@depth=\count100
@@ -175,21 +185,21 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \dotsspace@=\muskip10
 \c@parentequation=\count102
 \dspbrk@lvl=\count103
-\tag@help=\toks16
+\tag@help=\toks17
 \row@=\count104
 \column@=\count105
 \maxfields@=\count106
-\andhelp@=\toks17
-\eqnshift@=\dimen129
-\alignsep@=\dimen130
-\tagshift@=\dimen131
-\tagwidth@=\dimen132
-\totwidth@=\dimen133
-\lineht@=\dimen134
-\@envbody=\toks18
+\andhelp@=\toks18
+\eqnshift@=\dimen131
+\alignsep@=\dimen132
+\tagshift@=\dimen133
+\tagwidth@=\dimen134
+\totwidth@=\dimen135
+\lineht@=\dimen136
+\@envbody=\toks19
 \multlinegap=\skip45
 \multlinetaggap=\skip46
-\mathdisplay@stack=\toks19
+\mathdisplay@stack=\toks20
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
 )
@@ -200,24 +210,19 @@ nment
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count107
-\float@exts=\toks20
+\float@exts=\toks21
 \float@box=\box30
-\@float@everytoks=\toks21
+\@float@everytoks=\toks22
 \@floatcapt=\box31
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\@float@every@algorithm=\toks22
+\@float@every@algorithm=\toks23
 \c@algorithm=\count108
 )
 (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithmic.sty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
-
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks23
-)
 \c@ALC@unique=\count109
 \c@ALC@line=\count110
 \c@ALC@rem=\count111
@@ -227,9 +232,9 @@ Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 Package: array 2018/04/30 v2.4h Tabular extension package (FMi)
-\col@sep=\dimen135
+\col@sep=\dimen137
 \ar@mcellbox=\box32
-\extrarowheight=\dimen136
+\extrarowheight=\dimen138
 \NC@list=\toks24
 \extratabsurround=\skip49
 \backup@length=\skip50
@@ -241,30 +246,30 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ) (./SVM_11510511.aux)
 \openout1 = `SVM_11510511.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
 
 -- Lines per column: 58 (exact).
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count113
-\scratchdimen=\dimen137
+\scratchdimen=\dimen139
 \scratchbox=\box34
 \nofMPsegments=\count114
 \nofMParguments=\count115
 \everyMPshowfont=\toks25
 \MPscratchCnt=\count116
-\MPscratchDim=\dimen138
+\MPscratchDim=\dimen140
 \MPnumerator=\count117
 \makeMPintoPDFobject=\count118
 \everyMPtoPDFconversion=\toks26
@@ -324,14 +329,19 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 37.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 38.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.05249> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 37.
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 85
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 38.
+<1280px-SVM_margin.png, id=1, 231.264pt x 224.7597pt>
+File: 1280px-SVM_margin.png Graphic file (type png)
+<use 1280px-SVM_margin.png>
+Package pdftex.def Info: 1280px-SVM_margin.png  used on input line 54.
+(pdftex.def)             Requested size: 158.54082pt x 154.08978pt.
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 91
 .
 
 Underfull \hbox (badness 10000) in paragraph at lines 122--125
@@ -341,50 +351,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 122--125
 [1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
 
 
-]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 158.
+ <./1280px-SVM_margin.png>]
 
+LaTeX Warning: Command \textregistered invalid in math mode on input line 260.
+
+
+LaTeX Warning: Command \textcircled invalid in math mode on input line 260.
+
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 260.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.03749> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 158.
-
-Underfull \vbox (badness 2521) has occurred while \output is active []
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 260.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--231
-[] []$\OML/cmm/m/it/10 new[]high \OMS/cmsy/m/n/10  
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 231--232
-[] []$\OML/cmm/m/it/10 new[]high \OMS/cmsy/m/n/10  
- []
-
-
-Underfull \hbox (badness 2653) in paragraph at lines 212--243
-[]\OT1/ptm/b/n/10.03749 hill[]greedy\OT1/ptm/m/n/10.03749 : Gen-er-ate op-ti-ma
-l seed us-ing Hill
- []
-
-
-Underfull \hbox (badness 2343) in paragraph at lines 250--253
-[]\OT1/ptm/m/n/10.03749 Empirical ver-i-fi-ca-tion is con-firmed in OJ sys-tem.
-
- []
+LaTeX Warning: Command \textcircled invalid in math mode on input line 260.
 
 [2]
-
-LaTeX Warning: Command \textregistered invalid in math mode on input line 275.
-
-
-LaTeX Warning: Command \textcircled invalid in math mode on input line 275.
-
-
-LaTeX Warning: Command \textcircled invalid in math mode on input line 275.
-
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -396,30 +381,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[3] (./SVM_11510511.aux) ) 
+[3
+
+] (./SVM_11510511.aux) ) 
 Here is how much of TeX's memory you used:
- 3371 strings out of 494587
- 50971 string characters out of 6177758
- 127838 words of memory out of 5000000
- 6966 multiletter control sequences out of 15000+600000
+ 3440 strings out of 494587
+ 52081 string characters out of 6177758
+ 129037 words of memory out of 5000000
+ 7030 multiletter control sequences out of 15000+600000
  37179 words of font info for 69 fonts, out of 8000000 for 9000
  17 hyphenation exceptions out of 8191
- 41i,10n,25p,279b,613s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8
-r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
-imes/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on SVM_11510511.pdf (3 pages, 129113 bytes).
+ 41i,10n,25p,279b,536s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.
+enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on SVM_11510511.pdf (3 pages, 239226 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 58 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

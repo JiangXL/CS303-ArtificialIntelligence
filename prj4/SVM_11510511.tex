@@ -12,6 +12,7 @@
 \fi
 
 \usepackage{graphics}
+\usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{algorithm, algorithmic}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -39,8 +40,6 @@ Email: 11510511@mail.sustc.edu.cn}}
 \IEEEpeerreviewmaketitle
 
 \section{Preliminaries}
-Support Vector Machine(SVM) is...
-Our data ...
 
 Support vector machine, are supervised learning models with associated learning
 algorithms that analyze data used for classification and regression analysis.
@@ -50,11 +49,12 @@ examples to one category or the other, making it a non-probabilistic binary
 linear classifier.\cite{1} If the dataset are points in space, we can find out
 an gap separate dataset into two part by using SVM.
 
-%\begin{figure}
-%  \caption{Separate points into two using SVM.}
-%  \centering
-%    \includegraphics[width=0.5\linewidth]{SVM_margins.svg}
-%\end{figure}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.65\linewidth]{1280px-SVM_margin.png}
+\caption{Separate data points into two part using SVM(from Larhmam) 
+	\label{SVM demostrains}}
+\end{figure}
 
 The original SVM algorithm was invented by Vladir N. Vapnik and
 Alexey Ya. Chervonenkis in 1963. During the development, SVM are able to deal
@@ -73,7 +73,7 @@ random, sys and argparse library are used.
 
 \subsection{Algorithm}
 Model question with SVM. To optimal time cost and current of solution, random
-gradient down is used.
+gradient descent is used.
 
 \section{Methodology}
 Training data is ....
@@ -82,37 +82,37 @@ SVM is modeled as ...
 
 random ....
 
-Firstly, a social network is modeled as a directed graph $G=(V,E)$ and each
-edge $(u,v)\in E$ is associated with a weight $w(u,w)=\frac{1}{d_{in}}$ which
-indicates the probability that $u$ influences $v$. $S\in V$ is the subset of
-nodes selected to initiate the influence diffusion,  which is called seeds set.
+Training set contain 1334 sample, and each sample contain 10 features and 1
+label. With the help of other mathematical tools, training data show that
+it can be classified in linear model. So, SVM model is used as training
+model.
 
-Then, I try to evaluate the spread influence with two different diffusion
-models. In \textit{Linear Threshold} model, a node $v$ is influenced by each
-neighbor $u$ according to a weight $w_{v,u}$ such that $\sum_{u}{w_{v,u}}
-<=1$. The dynamics is following. Each node $v$ are accessed a threshold $\theta\in
-[0,1]$ randomly obeyed uniform distribution at first step; this represents
-the weighted fraction of $v$' neighbors that must become active in order
-for $v$ become active. In step $t$, each inactive node $v$ will be active
-by its active neighbors $w$ at step $t-1$ as following
-$$\sum_{w}{w_{u,v}} >= \theta_v$$. Once no new active node is generated,
-maximal spread influence will obtain with given seeds set in specified graph.
-I notices final influence as the total number of active node $\sigma$.
+For most common and basic SVM(Figure 1), linear SVM uses two parallel vector
+$w\cdot{x}-b=1$
+and $w\cdot{x}-b=-1$ to separate dataset $x$ into two parts, where $x$ is
+$m*n$ matrix with $n$ training samples of $m$ features, $w$ is a $m$ dimension
+vector of SVM parameters and $b$ also is parameter of SVM. The rule is that gap
+between two support vector don't exist any points expect of on the vectors.
+To optimal correctness of classification, enlarging the distance
+$\frac{2}{||w||}$ between two support vector is one of method. It belong to
+convex optimization problem as following:
 
-In \textit{Independent Cascade} model, I start with an initial set of active
-nodes $S$, and the process unfolds in discrete steps according to the following
-randomized rule. When node $v$ first becomes active in step $t$, it is given
-a single chance to activate each currently inactive neighbor $w$; it succeeds
-with a probability $w_{v,w}$, independently of the history thus far. Every
-step. In practical, for each inactive neighbor $w$ of new active node $v$ will
-be active, if $w_{v,w}$ is larger than a new generated random number between 0 and
-1 obeyed uniform distribution. (If $w$ has multiple newly activated neighbors,
-their attempts are sequenced in an arbitrary order.) If $v$ succeeds, then it
-cannot make any further attempts to activate $w$ in subsequent rounds. Again,
-the process runs until no more activation are possible.
+$${min}_{w,b}\frac{||w||^2}{2}$$
+$$s.t. y_i((w\cdot{x_i})+b) \le1, i=1,...,n$$
 
-Both of Linear Threshold and independent Cascade model are stimulated by
-repeating many time to average influence for each seed.
+To train data, we use loss function(also called cost function) to measure the
+difference between SVM's prediction and actual labels. Each training, SVM try
+to decrease the value of loss function. 
+
+$$ L(w,b)=\sum^n_i=1 max(0, 1-y_i((w_i, x_i)+b)) $$
+
+Then Gradient descend is used to update the feature weight matrix $w$. Each
+training, gradient descend promote loss function decrease by moving to
+opposite direction of gradient.
+
+$$ w = w -\alpha\frac{dL(w,b)}{dw}$$
+$$ \frac{dL(w,b)}{dw} = $$
+
 
 Finally, the seed required for IMP is generated by a natural greedy algorithm.
 Each time, a node with highest influence will added to a seeds set. This empty
@@ -154,9 +154,7 @@ Here describes some vital functions.
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
      \REQUIRE $input\_file\_name, time\_limit$
      \ENSURE $x, y, w, cycle$
-     \STATE open $input\_file\_name$ as $file$ \COMMENT{open file and read line
-     by line}
-     \STATE \COMMENT{Read each line information until arrive edge information}
+     \STATE open $input\_file\_name$ as $file$
      \STATE set $data$
      \FOR {each line in $file$}
           \STATE split line, then package and append line info to $data$
@@ -209,36 +207,24 @@ Here describes some vital functions.
      \end{algorithmic}
      \end{algorithm}
  
- \item \textbf{hill\_greedy}: Generate optimal seed using Hill Greedy Algorithm
+ \item \textbf{predict}: Predict the label of test data
      \begin{algorithm}[H]
-     \caption{hill\_greedy}
+     \caption{predict}
      \begin{algorithmic}[4]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $size, model$
-     \ENSURE  $seeds$
-     \STATE create empty $ans\_seeds$
-     \STATE $cnt \leftarrow 0$
-     \WHILE{$cnt \ne size$}
-	\STATE copy $ans\_seeds$ to $cur\_seed$
-	\STATE $high \leftarrow 0$
-	\STATE $point \leftarrow 1$
-        \FOR{each node $4$ don't be chosen}
-	     \STATE add $v$ to $cur\_seed$
-	     \IF{$model$ == IC}
-	          \STATE $new\_high \leftarrow IC(graph\_pc,cur\_speed, incoming)$ 
-	     \ELSE
-	          \STATE $new\_high \leftarrow LT(graph\_cp,cur\_speed, incoming)$ 
-	     \ENDIF
-	     \IF{$nw\_high \le high$}
-	         \STATE $high \leftarrow new\_high$
-		 \STATE $point \leftarrow v$
-	     \ENDIF
-        \ENDFOR
-	\STATE add $point$ to $ans\_seeds$
-	\STATE $cnt \leftarrow cnt+1$
-     \ENDWHILE
-     \RETURN $ans\_seeds$
+     \REQUIRE $test\_file, w$
+     \ENSURE  $label\_set$
+     \STATE open $test\_file$ as $file$
+     \STATE create set $test\_data$
+     \FOR {each line in $file$}
+          \STATE split line, then package and append line info to $test\_data$
+     \ENDFOR
+     \STATE transform set $test\_data$ to matrix $test\_set$
+     \STATE $test\_set[:, -1] \leftarrow 1$
+     \STATE create $label\_set$
+     \STATE $label\_set \leftarrow  sgn(\cdot{test\_set}{w})$
+     \RETURN $label\_set$
      \end{algorithmic}
      \end{algorithm}
  
@@ -247,7 +233,8 @@ Here describes some vital functions.
 
 
 \section{Empirical Verification}
-Empirical verification is confirmed in OJ system. $ISE.py$ almost pass all
+Empirical verification is verified offline with given data set. We do the 
+OJ system. $ISE.py$ almost pass all
 dataset with reasonable bias. $IMP.py$ only was test with network-5-IC and
 provide reasonable seeds set.
 
@@ -265,13 +252,11 @@ small graph, which produce seeds in 65 percent effect. But
 Not optimal seeds are produced every time.
 
 \subsection{Data and data structure}
-Dictionaries and lists are used widely rather than matrix. Because the input graph
-is sparse, dictionary are always used to store graph as adjacent list. Global
-variable $graph\_pc$, $graph\_cp$ and $incoming$ are dictionary. Lists always
-store routes and edges information for local variable.
+For the convenience, matrix are used widely to store train set, test set and
+features matrix.
 
 \subsection{Performance}
-Following table show different performance with different dataset. Offline
+Following table show different performance with different parameters. Offline
 test perform at Fedora 29 with $Intel^{®}$ Xeon(R) CPU E5-1680 v3@3.20GHz and
 32GiB memory.
 
@@ -294,9 +279,7 @@ test perform at Fedora 29 with $Intel^{®}$ Xeon(R) CPU E5-1680 v3@3.20GHz and
 % Table of difference problem
 
 \subsection{Result}
-% 
-Solutions are accepted most all public dataset' test. But Linear Threshold model
-produce influence with large bias. 
+Best model classify data set at 99.6 percent of correctness.
 
 \subsection{Analysis}
 % Analysis different parameter's results
@@ -312,10 +295,7 @@ And I also thanks for Kebing Sun discuss and share the idea about algorithm.
 \bibliographystyle{IEEEtran}
 \begin{thebibliography}{1}
 \bibitem{1}
-Kempe D, Kleinberg J, Tardos É. Maximizing the spread of influence through a
-social network[C]//Proceedings of the ninth ACM SIGKDD international conference
-on Knowledge discovery and data mining. ACM, 2003: 137-146.
-
+Wikipedia
 \end{thebibliography}
 
 % that's all folks
