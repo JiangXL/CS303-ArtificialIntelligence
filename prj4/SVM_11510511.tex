@@ -69,7 +69,6 @@ classification.
 In this project, I use SVM with random gradient descent to classify training
 data almost correctly. 
 
-% Add figure here
 
 \subsection{Software}
 This project is written by Python 3.7 with editor Vim. Numpy, os, time,
@@ -109,19 +108,24 @@ training, gradient descend promote loss function decrease by moving to
 opposite direction of gradient. In order to reduce the time cost to update
 $w$ with whole dataset, we always to choose part of dataset in random.
 
-$$ w = w -\alpha\frac{dL(w,b)}{dw}$$
-$$ \frac{dL(w,b)}{dw} = $$
+$$ w = w -\alpha\frac{\partial L(w,b)}{\partial w}$$
+$$ \frac{\partial L(w,b)}{\partial w} = -y_i x_i, if 1-y_i((<w,x>+b)>=0), otherwise 0$$
 
-In formula(?), $\alpha$ is the learning rate,
+In above formula, $\alpha$ is the learning rate,
 which determine the moved distance in each update. In this project, learning
 rate always is updated during training, where learning rate being slower and
 slower.
 
-$$w = w -\beta \alpha \frac{dL(w,b)}{dw}$$
+$$w = w -\beta \alpha \frac{\partial L(w,b)}{\partial w}$$
 
 In practical, we add one more direction at the end of each sample$x_i$.
 Final $w$ combine original $w$ and $b$ together. So $x$ is a $(m+1)n$ matrix,
 and $w$ is a $m+1$ vector.
+
+To avoid over fitting, k-fold cross validation is used. Whole training dataset
+is divided into 10 parts in equal in random. Each time, one part from 10 parts
+is chosen as test dataset, other 9 part as training dataset. Finally, the
+average of all $w$ in 10 model is final $w$.
 
 After training by SVM, $w$ and $b$ is final result, which can predict the label
 of test dataset.
@@ -162,7 +166,7 @@ Here describes some vital functions.
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
      \REQUIRE $input\_file\_name, time\_limit$
-     \ENSURE $x, y, w, cycle$
+     \ENSURE $x, y, w$
      \STATE open $input\_file\_name$ as $file$
      \STATE create set $data$
      \FOR {each line in $file$}
@@ -171,9 +175,8 @@ Here describes some vital functions.
      \STATE transform set $data$ to matrix $x$
      \STATE $y \leftarrow x[:,-1]$ 
      \STATE $x[:, -1] \leftarrow 1$
-     \STATE initialize $w$ in 0 with length of $m+1$. 
-     \STATE $cycle$
-     \RETURN $x, y, w, cycle$
+     \STATE initialize $w$ in uniform distribution with length of $m+1$. 
+     \RETURN $x, y, w$
      \end{algorithmic}
    \end{algorithm}
 
@@ -200,7 +203,7 @@ Here describes some vital functions.
      \begin{algorithmic}[3]
      \renewcommand{\algorithmicrequire}{\textbf{Input:}}
      \renewcommand{\algorithmicensure}{\textbf{Output:}}
-     \REQUIRE $x, y, w, cnt, \alpha$
+     \REQUIRE $x, y, w,\beta, \alpha$
      \ENSURE  $w$
      \STATE $t \leftarrow 0$
      \WHILE{ running time don't exceed ordered time}
@@ -230,28 +233,48 @@ Here describes some vital functions.
           \STATE split line, then package and append to $test\_data$
      \ENDFOR
      \STATE transform set $test\_data$ to matrix $test\_set$
-     \STATE $test\_set[:, -1] \leftarrow 1$
-     \STATE create $label\_set$
+     \STATE append 1 at each end of column
      \STATE $label\_set \leftarrow  sgn(test\_set\cdot{w})$
      \RETURN $label\_set$
      \end{algorithmic}
      \end{algorithm}
  
-
+ \item \textbf{\_\_main\_\_}: main control flow
+	 \begin{algorithm}[H]
+	\caption{\_\_main\_\_}
+	\begin{algorithmic}[5]
+ 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+        \renewcommand{\algorithmicensure}{\textbf{Output:}}
+	\REQUIRE 
+	\ENSURE
+	\STATE pass through $time\_limit$, train dataset, test dataset
+	\STATE $init$
+	\STATE use 10-hold cross validation train $w$
+	\STATE use $predict$ with test data set to predict final result
+	\end{algorithmic}
+        \end{algorithm}
+ 	
 \end{itemize}
 
 
 \section{Empirical Verification}
 Empirical verification is verified offline with given dataset. K-fold
-cross-validation is used to verify and choose best result.
+cross-validation is used to verify and choose best result. In most of
+case, the correctness is above 90 percent.
 
 \subsection{Design}
-SVM classify data at less 90 percent robust.
 
 Random gradient descent return in reasonable time than simple gradient
 descent algorithm.
 
-SMO...
+K-fold cross validation maybe reduce chance of overfitting, but it reduce
+the iteration of single gradient descent. Although, training without cross
+validation performance better, cross validation result still is suitable
+for unknown dataset.
+
+Training time also determine the performance of final result, which seem
+that more time is flavor. 
+
 
 \subsection{Data and data structure}
 For the convenience, matrix are used widely to store train set, test set and
@@ -262,15 +285,33 @@ Following table show different performance with different parameters. Offline
 test perform at Fedora 29 with $Intel^{®}$ Xeon(R) CPU E5-1680 v3@3.20GHz and
 32GiB memory.
 
+Here are 10-fold cross validation.
 \begin{center}
-   \begin{tabular}{| l | l | l |l |}
+   \begin{tabular}{| l | l |l |}
    \hline
-    Test                        &Run Time(s)  &Iter     &Result   \\ \hline
-    Random gradient descent         & 0.73    &10     & 19.45  \\
-	   SMO                             &2 &1      &8 \\
+   Run Time(s)  &Iteration     &Correctness   \\ \hline
+    10           &10*66        & 95.3523  \\
+    20           &10*146       & 98.0510  \\
+    30           &10*226       & 97.8260  \\
+    60           &10*440       & 98.4258  \\
    \hline
    \end{tabular}
 \end{center}
+
+Here are training without 10-fold cross validation.
+\begin{center}
+   \begin{tabular}{| l | l |l |}
+   \hline
+   Run Time(s)  &Iteration     &Correctness   \\ \hline
+    10           &670        & 97.2264  \\
+    20           &1356       & 98.3759  \\
+    30           &2064       & 97.9760  \\
+    60           &4176       & 98.8006  \\
+   \hline
+   \end{tabular}
+\end{center}
+
+
 % Table of difference problem
 
 \subsection{Result}
@@ -290,7 +331,7 @@ And I also thanks for Kebing Sun discuss and share the idea about algorithm.
 \bibliographystyle{IEEEtran}
 \begin{thebibliography}{1}
 \bibitem{1}
-Wikipedia
+Wikipedia contributors, [Online], Available: https://en.wikipedia.org/wiki/Support\_vector\_machine, [Accessed: 31-Dec-2018].
 \end{thebibliography}
 
 % that's all folks

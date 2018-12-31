@@ -43,6 +43,7 @@ def cal_sgd(xi, yi, w, ratio, learn_speed):
 
 ## Training fucntion
 def train(x, y, w, learn_speed, time0, time_lim):
+    if isDebug: log = open("learn_curve.log", "w")
     t = 0
     while(time.time()-time0 < time_lim):
         randomize =  np.arange(len(x))
@@ -56,6 +57,8 @@ def train(x, y, w, learn_speed, time0, time_lim):
         for xi, yi in zip(x, y):
             loss += get_loss(xi, yi, w)
             w = cal_sgd(xi, yi, w, ratio, learn_speed)
+       # print train result each time
+        if isDebug: log.write("%d\n"%(loss))
     return w
 
 def predict(test_txt, w):
@@ -117,7 +120,13 @@ if __name__ == '__main__':
     w = sum(train_w)/len(train_w)
 
     result = predict(test_data, w)
+    if isDebug: output = open("test_data_res.txt","w")
     for each in result:
-        print(each)
+        if isDebug:
+            display= "%.1f\n"%each
+            output.write(display)
+        else:
+            print(each)
+    if isDebug: output.close()
     sys.stdout.flush()
     os._exit(0)

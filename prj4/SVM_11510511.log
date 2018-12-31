@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  31 DEC 2018 10:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.12.10)  31 DEC 2018 23:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,6 +388,8 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 30.
 LaTeX Info: Redefining \pageref on input line 30.
 LaTeX Info: Redefining \nameref on input line 30.
+
+(./SVM_11510511.out) (./SVM_11510511.out)
 \@outlinefile=\write3
 \openout3 = `SVM_11510511.out'.
 
@@ -429,14 +431,22 @@ File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.05249> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 43.
-<1280px-SVM_margin.png, id=5, 231.264pt x 224.7597pt>
+<1280px-SVM_margin.png, id=61, 231.264pt x 224.7597pt>
 File: 1280px-SVM_margin.png Graphic file (type png)
 <use 1280px-SVM_margin.png>
 Package pdftex.def Info: 1280px-SVM_margin.png  used on input line 58.
 (pdftex.def)             Requested size: 158.54082pt x 154.08978pt.
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 89
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 88
 .
- [1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
+
+Overfull \hbox (16.90031pt too wide) detected at line 112
+[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OML/cmm/m/it/10 y[]x[]; if\OT1/cmr/m/
+n/10 1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 y[]\OT1/cmr/m/n/10 ((\OML/cmm/m/it
+/10 < w; x > \OT1/cmr/m/n/10 +\OML/cmm/m/it/10 b\OT1/cmr/m/n/10 ) \OML/cmm/m/it
+/10 >\OT1/cmr/m/n/10 = 0)\OML/cmm/m/it/10 ; otherwise\OT1/cmr/m/n/10 0
+ []
+
+[1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
@@ -444,35 +454,44 @@ s been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.120 $$w = w -\beta \alpha \frac{dL(w,b)}{dw}$$
-                                                 <./1280px-SVM_margin.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 130--133
+l.119 ...lpha \frac{\partial L(w,b)}{\partial w}$$
+                                                   <./1280px-SVM_margin.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 134--137
 []\OT1/ptm/m/n/10.03749 Some main data are main-tain dur-ing pro-cess:
  []
 
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 160.
-[2]
+put line 164.
 
-LaTeX Warning: Command \textregistered invalid in math mode on input line 262.
+Underfull \vbox (badness 1215) has occurred while \output is active []
+
+ [2]
+
+LaTeX Warning: Command \textregistered invalid in math mode on input line 285.
 
 
-LaTeX Warning: Command \textcircled invalid in math mode on input line 262.
+LaTeX Warning: Command \textcircled invalid in math mode on input line 285.
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 262.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 285.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.03749> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 262.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 285.
 
 
-LaTeX Warning: Command \textcircled invalid in math mode on input line 262.
+LaTeX Warning: Command \textcircled invalid in math mode on input line 285.
 
 
-Overfull \hbox (1.38599pt too wide) in paragraph at lines 266--273
- [] 
+Underfull \hbox (badness 10000) in paragraph at lines 334--335
+[]\OT1/ptm/m/n/8.03 Wikipedia con-trib-u-tors, [On-line], Avail-able:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 334--335
+\OT1/ptm/m/n/8.03 https://en.wikipedia.org/wiki/Support[]vector[]machine, [Ac-c
+essed:
  []
 
 
@@ -486,33 +505,21 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 297.
-[3
-
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 297.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 338.
+[3]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 338.
  (./SVM_11510511.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 297.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 297.
-
-
-Package rerunfilecheck Warning: File `SVM_11510511.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `SVM_11510511.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  BFB0A76807E079284441F18D41A54EDB;808.
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 297.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 338.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 338.
+Package rerunfilecheck Info: File `SVM_11510511.out' has not changed.
+(rerunfilecheck)             Checksum: BFB0A76807E079284441F18D41A54EDB;808.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 338.
  ) 
 Here is how much of TeX's memory you used:
- 6942 strings out of 494587
- 105025 string characters out of 6177758
- 205595 words of memory out of 5000000
- 10459 multiletter control sequences out of 15000+600000
+ 6964 strings out of 494587
+ 105337 string characters out of 6177758
+ 206800 words of memory out of 5000000
+ 10474 multiletter control sequences out of 15000+600000
  37179 words of font info for 69 fonts, out of 8000000 for 9000
  17 hyphenation exceptions out of 8191
  28i,10n,28p,243b,605s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -526,10 +533,10 @@ sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on SVM_11510511.pdf (3 pages, 240545 bytes).
+Output written on SVM_11510511.pdf (3 pages, 243571 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
- 120 compressed objects within 2 object streams
- 63 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 185 PDF objects out of 1000 (max. 8388607)
+ 166 compressed objects within 2 object streams
+ 66 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 
